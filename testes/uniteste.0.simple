@@ -1,0 +1,57 @@
+{
+  descrever: { nome testes } => destino => (
+    passaram = 0
+    total = 0
+    mensagens = []
+    i = 0
+    
+    // Process each test
+    | i < testes[.] = (
+      resultado = testes[i]("descrever")
+      passaram = passaram + resultado.passaram
+      total = total + resultado.mensagens[.]
+      j = 0
+      | j < resultado.mensagens[.] = (
+        mensagens = mensagens ++ [[nome " | " resultado.mensagens[j]] * ""]
+        j = j + 1
+      )
+      i = i + 1
+    )
+    
+    resultado_final = {
+      passaram: passaram
+      mensagens: mensagens
+    }
+    
+    destino == "descrever" ? resultado_final : (
+      // Print results
+      k = 0
+      | k < mensagens[.] = (
+        console.log(mensagens[k])
+        k = k + 1
+      )
+      console.log(passaram + "/" + mensagens[.] + " testes passaram.")
+      processo.exit(passaram == mensagens[.] ? 0 : 1)
+    )
+  )
+  
+  iguais: args => destino => (
+    _passaram = args[0] == args[1] ? 1 : 0
+    resultado = {
+      passaram: _passaram
+      mensagens: [
+        _passaram == 1 ? "ok" : [
+          "Esperava que "
+          "" + args[0]
+          " fosse igual a "
+          "" + args[1]
+          "."
+        ] * ""
+      ]
+    }
+    destino == "descrever" ? resultado : (
+      console.log(resultado.mensagens[0])
+      processo.exit(_passaram)
+    )
+  )
+}
