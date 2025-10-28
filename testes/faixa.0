@@ -1,4 +1,4 @@
-uniteste = uniteste.0.local
+uniteste = uniteste.0
 dialeto = ../código/0
 
 uniteste.descrever({

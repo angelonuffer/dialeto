@@ -2,5 +2,6 @@
   nome: "dialeto"
   testes: [
     faixa.0
+    gerar.0
   ]
 })

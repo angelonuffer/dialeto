@@ -7,4 +7,6 @@
     | {
       sucesso: 0
     }
+  gerar: { gramática } =>
+    gramática.faixa.de
 }

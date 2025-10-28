@@ -1,0 +1,59 @@
+uniteste = uniteste.0
+dialeto = ../código/0
+
+uniteste.descrever({
+  nome: "gerar"
+  testes: [
+    ...(
+      resultado = dialeto.gerar({
+        gramática: {
+          tipo: "texto"
+          faixa: {
+            de: "a"
+            até: "c"
+          }
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado
+          "a"
+        ])
+      ]
+    )
+    ...(
+      resultado = dialeto.gerar({
+        gramática: {
+          tipo: "texto"
+          faixa: {
+            de: "x"
+            até: "z"
+          }
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado
+          "x"
+        ])
+      ]
+    )
+    ...(
+      resultado = dialeto.gerar({
+        gramática: {
+          tipo: "texto"
+          faixa: {
+            de: "0"
+            até: "9"
+          }
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado
+          "0"
+        ])
+      ]
+    )
+  ]
+})
