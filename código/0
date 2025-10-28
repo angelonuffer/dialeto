@@ -1,0 +1,10 @@
+{
+  avaliar: { entrada gramática } =>
+    | (gramática.faixa.de <= entrada & gramática.faixa.até >= entrada) = {
+      sucesso: 1
+      valor: entrada
+    }
+    | {
+      sucesso: 0
+    }
+}

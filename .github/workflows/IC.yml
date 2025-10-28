@@ -1,0 +1,22 @@
+name: IC
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  testar:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/checkout@v4
+      with:
+        repository: angelonuffer/0
+        ref: e1df08b8e174b30e8a27d536b841aeb80c8d51da
+        path: "./0"
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+    - run: node 0/código/0_node.js testes/0 node | node

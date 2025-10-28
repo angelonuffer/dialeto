@@ -1,0 +1,110 @@
+uniteste = uniteste.0
+dialeto = ../código/0
+
+uniteste.descrever({
+  nome: "faixa"
+  testes: [
+    ...(
+      resultado = dialeto.avaliar({
+        entrada: "b"
+        gramática: {
+          tipo: "texto"
+          faixa: {
+            de: "a"
+            até: "c"
+          }
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          1
+        ])
+        uniteste.iguais([
+          resultado.valor
+          "b"
+        ])
+      ]
+    )
+    ...(
+      resultado = dialeto.avaliar({
+        entrada: "a"
+        gramática: {
+          tipo: "texto"
+          faixa: {
+            de: "a"
+            até: "c"
+          }
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          1
+        ])
+        uniteste.iguais([
+          resultado.valor
+          "a"
+        ])
+      ]
+    )
+    ...(
+      resultado = dialeto.avaliar({
+        entrada: "c"
+        gramática: {
+          tipo: "texto"
+          faixa: {
+            de: "a"
+            até: "c"
+          }
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          1
+        ])
+        uniteste.iguais([
+          resultado.valor
+          "c"
+        ])
+      ]
+    )
+    ...(
+      resultado = dialeto.avaliar({
+        entrada: "d"
+        gramática: {
+          tipo: "texto"
+          faixa: {
+            de: "a"
+            até: "c"
+          }
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          0
+        ])
+      ]
+    )
+    ...(
+      resultado = dialeto.avaliar({
+        entrada: "Z"
+        gramática: {
+          tipo: "texto"
+          faixa: {
+            de: "a"
+            até: "c"
+          }
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          0
+        ])
+      ]
+    )
+  ]
+})

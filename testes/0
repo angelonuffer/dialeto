@@ -1,0 +1,6 @@
+(uniteste.0).descrever({
+  nome: "dialeto"
+  testes: [
+    faixa.0
+  ]
+})
