@@ -1,46 +1,26 @@
-# dialeto
+# Dialeto
 
-Este projeto implementa um avaliador de gramática simples para textos, com suporte a faixas de caracteres e símbolos exatos. Ele permite verificar se uma entrada está dentro de uma faixa definida ou se corresponde exatamente a um símbolo especificado.
+Esta biblioteca implementa um analisador que valida a entrada de acordo com a gramática definida e retorna o valor correspondente.
 
-## Como executar os testes
+## dialeto.analisar
 
-Os testes são executados automaticamente via GitHub Actions (workflow em `.github/workflows/IC.yml`). Para rodar localmente:
+Esta função analisa a entrada fornecida de acordo com a gramática especificada.
 
-1. Instale Node.js 22.
-2. Execute:
-   ```sh
-   node 0/código/0_node.js testes/0 node | node
-   ```
+### Parâmetros
 
-## Exemplos de uso
+- **entrada** (texto) - A entrada a ser analisada.
+- **gramática** (objeto) - O objeto de gramática que define as regras de análise.
+  - **gramática.tipo** (texto) - O tipo de gramática a ser utilizada.
 
-### Gramática de Faixa
+  - Se **gramática.tipo** == "símbolo":
+    - **gramática.texto** (texto) - O texto a ser comparado.
 
-Verifica se a entrada está dentro de um intervalo definido:
+  - Se **gramática.tipo** == "faixa":
+    - **gramática.de** (texto) - O limite inferior da faixa.
+    - **gramática.até** (texto) - O limite superior da faixa.
 
-```
-dialeto.analisar({
-  entrada: "b"
-  gramática: {
-    tipo: "faixa"
-    de: "a"
-    até: "c"
-  }
-})
-// Retorna: { sucesso: 1 valor: "b" }
-```
+### Retorno
 
-### Gramática de Símbolo
-
-Verifica se a entrada é exatamente igual ao texto especificado:
-
-```
-dialeto.analisar({
-  entrada: "hello"
-  gramática: {
-    tipo: "símbolo"
-    texto: "hello"
-  }
-})
-// Retorna: { sucesso: 1 valor: "hello" }
-```
+- **retorno** (objeto) - Um objeto contendo o resultado da análise.
+  - **retorno.sucesso** (número) - Indica se a análise foi bem-sucedida (1) ou não (0).
+  - **retorno.valor** (texto) - O valor correspondente à entrada analisada, se a análise for bem-sucedida.
