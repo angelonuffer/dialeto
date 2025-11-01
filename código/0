@@ -54,20 +54,9 @@
         separador = | (gramática.separador == nulo) = ""
                     | gramática.separador
         
-        concatenar = { valores separador } =>
-          | (valores[.] == 0) = ""
-          | (valores[.] == 1) = valores[0]
-          | valores[0] + separador + concatenar({
-            valores: valores[1:]
-            separador: separador
-          })
-        
         {
           sucesso: 1
-          valor: concatenar({
-            valores: resultadoPartes.valores
-            separador: separador
-          })
+          valor: resultadoPartes.valores * separador
           posFim: resultadoPartes.posAtual
         }
       )
