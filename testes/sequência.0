@@ -1,0 +1,185 @@
+uniteste = uniteste.0
+dialeto = ../código/0
+
+uniteste.descrever({
+  nome: "sequência"
+  testes: [
+    ...(
+      resultado = dialeto.analisar({
+        entrada: "hi"
+        gramática: {
+          tipo: "sequência"
+          formato: "texto"
+          partes: [
+            { tipo: "símbolo" texto: "h" }
+            { tipo: "símbolo" texto: "i" }
+          ]
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          1
+        ])
+        uniteste.iguais([
+          resultado.valor
+          "hi"
+        ])
+      ]
+    )
+    ...(
+      resultado = dialeto.analisar({
+        entrada: "a7"
+        gramática: {
+          tipo: "sequência"
+          formato: "lista"
+          partes: [
+            { tipo: "símbolo" texto: "a" }
+            { tipo: "faixa" de: "0" até: "9" }
+          ]
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          1
+        ])
+        uniteste.iguais([
+          resultado.valor[0]
+          "a"
+        ])
+        uniteste.iguais([
+          resultado.valor[1]
+          "7"
+        ])
+      ]
+    )
+    ...(
+      resultado = dialeto.analisar({
+        entrada: "ax"
+        gramática: {
+          tipo: "sequência"
+          formato: "lista"
+          partes: [
+            { tipo: "símbolo" texto: "a" }
+            { tipo: "símbolo" texto: "b" }
+          ]
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          0
+        ])
+      ]
+    )
+    ...(
+      resultado = dialeto.analisar({
+        entrada: "ab"
+        gramática: {
+          tipo: "sequência"
+          formato: "texto"
+          separador: "-"
+          partes: [
+            { tipo: "símbolo" texto: "a" }
+            { tipo: "símbolo" texto: "b" }
+          ]
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          1
+        ])
+        uniteste.iguais([
+          resultado.valor
+          "a-b"
+        ])
+      ]
+    )
+    ...(
+      resultado = dialeto.analisar({
+        entrada: "abc"
+        gramática: {
+          tipo: "sequência"
+          formato: "texto"
+          separador: ", "
+          partes: [
+            { tipo: "símbolo" texto: "a" }
+            { tipo: "símbolo" texto: "b" }
+            { tipo: "símbolo" texto: "c" }
+          ]
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          1
+        ])
+        uniteste.iguais([
+          resultado.valor
+          "a, b, c"
+        ])
+      ]
+    )
+    ...(
+      resultado = dialeto.analisar({
+        entrada: "ab"
+        gramática: {
+          tipo: "sequência"
+          formato: "texto"
+          partes: [
+            { tipo: "símbolo" texto: "a" }
+            { tipo: "símbolo" texto: "b" }
+          ]
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          1
+        ])
+        uniteste.iguais([
+          resultado.valor
+          "ab"
+        ])
+      ]
+    )
+    ...(
+      resultado = dialeto.analisar({
+        entrada: "abc"
+        gramática: {
+          tipo: "sequência"
+          formato: "lista"
+          partes: [
+            { tipo: "símbolo" texto: "a" }
+            { tipo: "símbolo" texto: "b" }
+            { tipo: "símbolo" texto: "c" }
+          ]
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          1
+        ])
+        uniteste.iguais([
+          resultado.valor[.]
+          3
+        ])
+        uniteste.iguais([
+          resultado.valor[0]
+          "a"
+        ])
+        uniteste.iguais([
+          resultado.valor[1]
+          "b"
+        ])
+        uniteste.iguais([
+          resultado.valor[2]
+          "c"
+        ])
+      ]
+    )
+  ]
+})

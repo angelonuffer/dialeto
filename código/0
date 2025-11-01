@@ -1,12 +1,96 @@
 {
-  analisar: { entrada gramática } =>
-    | (gramática.tipo == "faixa" & gramática.de <= entrada & gramática.até >= entrada) = {
+  analisarPos: { entrada gramática pos } =>
+    | (gramática.tipo == "faixa" & pos < entrada[.] & gramática.de <= entrada[pos:pos+1] & gramática.até >= entrada[pos:pos+1]) = {
       sucesso: 1
-      valor: entrada
+      valor: entrada[pos:pos+1]
+      posFim: pos + 1
     }
-    | (gramática.tipo == "símbolo" & gramática.texto == entrada) = {
+    | (gramática.tipo == "símbolo" & entrada[pos:pos + gramática.texto[.]] == gramática.texto) = {
       sucesso: 1
-      valor: entrada
+      valor: gramática.texto
+      posFim: pos + gramática.texto[.]
+    }
+    | (gramática.tipo == "sequência") = (
+      analisarPartes = { partes posAtual valores } =>
+        | (partes[.] == 0) = {
+          sucesso: 1
+          posAtual: posAtual
+          valores: valores
+        }
+        | (
+          resultado = analisarPos({
+            entrada: entrada
+            gramática: partes[0]
+            pos: posAtual
+          })
+          | (resultado.sucesso == 0) = {
+            sucesso: 0
+          }
+          | (resultado.posFim == posAtual) = {
+            sucesso: 0
+          }
+          | analisarPartes({
+            partes: partes[1:]
+            posAtual: resultado.posFim
+            valores: [...valores resultado.valor]
+          })
+        )
+      
+      resultadoPartes = analisarPartes({
+        partes: gramática.partes
+        posAtual: pos
+        valores: []
+      })
+      
+      | (resultadoPartes.sucesso == 0) = {
+        sucesso: 0
+      }
+      | (gramática.formato == "lista") = {
+        sucesso: 1
+        valor: resultadoPartes.valores
+        posFim: resultadoPartes.posAtual
+      }
+      | (gramática.formato == "texto") = (
+        separador = | (gramática.separador == nulo) = ""
+                    | gramática.separador
+        
+        concatenar = { valores separador } =>
+          | (valores[.] == 0) = ""
+          | (valores[.] == 1) = valores[0]
+          | valores[0] + separador + concatenar({
+            valores: valores[1:]
+            separador: separador
+          })
+        
+        {
+          sucesso: 1
+          valor: concatenar({
+            valores: resultadoPartes.valores
+            separador: separador
+          })
+          posFim: resultadoPartes.posAtual
+        }
+      )
+      | {
+        sucesso: 0
+      }
+    )
+    | {
+      sucesso: 0
+    }
+  
+  analisar: { entrada gramática } =>
+    resultado = analisarPos({
+      entrada: entrada
+      gramática: gramática
+      pos: 0
+    })
+    | (resultado.sucesso == 0) = {
+      sucesso: 0
+    }
+    | (resultado.posFim == entrada[.]) = {
+      sucesso: 1
+      valor: resultado.valor
     }
     | {
       sucesso: 0
