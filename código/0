@@ -4,6 +4,10 @@
       sucesso: 1
       valor: entrada
     }
+    | (gramática.tipo == "símbolo" & gramática.texto == entrada) = {
+      sucesso: 1
+      valor: entrada
+    }
     | {
       sucesso: 0
     }

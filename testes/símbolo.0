@@ -1,0 +1,95 @@
+uniteste = uniteste.0
+dialeto = ../código/0
+
+uniteste.descrever({
+  nome: "símbolo"
+  testes: [
+    ...(
+      resultado = dialeto.analisar({
+        entrada: "a"
+        gramática: {
+          tipo: "símbolo"
+          texto: "a"
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          1
+        ])
+        uniteste.iguais([
+          resultado.valor
+          "a"
+        ])
+      ]
+    )
+    ...(
+      resultado = dialeto.analisar({
+        entrada: "hello"
+        gramática: {
+          tipo: "símbolo"
+          texto: "hello"
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          1
+        ])
+        uniteste.iguais([
+          resultado.valor
+          "hello"
+        ])
+      ]
+    )
+    ...(
+      resultado = dialeto.analisar({
+        entrada: "a"
+        gramática: {
+          tipo: "símbolo"
+          texto: "b"
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          0
+        ])
+      ]
+    )
+    ...(
+      resultado = dialeto.analisar({
+        entrada: "hello"
+        gramática: {
+          tipo: "símbolo"
+          texto: "world"
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          0
+        ])
+      ]
+    )
+    ...(
+      resultado = dialeto.analisar({
+        entrada: ""
+        gramática: {
+          tipo: "símbolo"
+          texto: ""
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          1
+        ])
+        uniteste.iguais([
+          resultado.valor
+          ""
+        ])
+      ]
+    )
+  ]
+})
