@@ -1,6 +1,6 @@
 {
-  avaliar: { entrada gramática } =>
-    | (gramática.faixa.de <= entrada & gramática.faixa.até >= entrada) = {
+  analisar: { entrada gramática } =>
+    | (gramática.tipo == "faixa" & gramática.de <= entrada & gramática.até >= entrada) = {
       sucesso: 1
       valor: entrada
     }

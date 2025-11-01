@@ -5,14 +5,12 @@ uniteste.descrever({
   nome: "faixa"
   testes: [
     ...(
-      resultado = dialeto.avaliar({
+      resultado = dialeto.analisar({
         entrada: "b"
         gramática: {
-          tipo: "texto"
-          faixa: {
-            de: "a"
-            até: "c"
-          }
+          tipo: "faixa"
+          de: "a"
+          até: "c"
         }
       })
       [
@@ -27,14 +25,12 @@ uniteste.descrever({
       ]
     )
     ...(
-      resultado = dialeto.avaliar({
+      resultado = dialeto.analisar({
         entrada: "a"
         gramática: {
-          tipo: "texto"
-          faixa: {
-            de: "a"
-            até: "c"
-          }
+          tipo: "faixa"
+          de: "a"
+          até: "c"
         }
       })
       [
@@ -49,14 +45,12 @@ uniteste.descrever({
       ]
     )
     ...(
-      resultado = dialeto.avaliar({
+      resultado = dialeto.analisar({
         entrada: "c"
         gramática: {
-          tipo: "texto"
-          faixa: {
-            de: "a"
-            até: "c"
-          }
+          tipo: "faixa"
+          de: "a"
+          até: "c"
         }
       })
       [
@@ -71,14 +65,12 @@ uniteste.descrever({
       ]
     )
     ...(
-      resultado = dialeto.avaliar({
+      resultado = dialeto.analisar({
         entrada: "d"
         gramática: {
-          tipo: "texto"
-          faixa: {
-            de: "a"
-            até: "c"
-          }
+          tipo: "faixa"
+          de: "a"
+          até: "c"
         }
       })
       [
@@ -89,14 +81,12 @@ uniteste.descrever({
       ]
     )
     ...(
-      resultado = dialeto.avaliar({
+      resultado = dialeto.analisar({
         entrada: "Z"
         gramática: {
-          tipo: "texto"
-          faixa: {
-            de: "a"
-            até: "c"
-          }
+          tipo: "faixa"
+          de: "a"
+          até: "c"
         }
       })
       [
