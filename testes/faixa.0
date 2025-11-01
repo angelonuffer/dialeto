@@ -4,102 +4,97 @@ dialeto = ../código/0
 uniteste.descrever({
   nome: "faixa"
   testes: [
-    uniteste.descrever({
-      nome: "analisar"
-      testes: [
-        ...(
-          resultado = dialeto.analisar({
-            entrada: "b"
-            gramática: {
-              tipo: "faixa"
-              de: "a"
-              até: "c"
-            }
-          })
-          [
-            uniteste.iguais([
-              resultado.sucesso
-              1
-            ])
-            uniteste.iguais([
-              resultado.valor
-              "b"
-            ])
-          ]
-        )
-        ...(
-          resultado = dialeto.analisar({
-            entrada: "a"
-            gramática: {
-              tipo: "faixa"
-              de: "a"
-              até: "c"
-            }
-          })
-          [
-            uniteste.iguais([
-              resultado.sucesso
-              1
-            ])
-            uniteste.iguais([
-              resultado.valor
-              "a"
-            ])
-          ]
-        )
-        ...(
-          resultado = dialeto.analisar({
-            entrada: "c"
-            gramática: {
-              tipo: "faixa"
-              de: "a"
-              até: "c"
-            }
-          })
-          [
-            uniteste.iguais([
-              resultado.sucesso
-              1
-            ])
-            uniteste.iguais([
-              resultado.valor
-              "c"
-            ])
-          ]
-        )
-        ...(
-          resultado = dialeto.analisar({
-            entrada: "d"
-            gramática: {
-              tipo: "faixa"
-              de: "a"
-              até: "c"
-            }
-          })
-          [
-            uniteste.iguais([
-              resultado.sucesso
-              0
-            ])
-          ]
-        )
-        ...(
-          resultado = dialeto.analisar({
-            entrada: "Z"
-            gramática: {
-              tipo: "faixa"
-              de: "a"
-              até: "c"
-            }
-          })
-          [
-            uniteste.iguais([
-              resultado.sucesso
-              0
-            ])
-          ]
-        )
+    ...(
+      resultado = dialeto.analisar({
+        entrada: "b"
+        gramática: {
+          tipo: "faixa"
+          de: "a"
+          até: "c"
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          1
+        ])
+        uniteste.iguais([
+          resultado.valor
+          "b"
+        ])
       ]
-    })
+    )
+    ...(
+      resultado = dialeto.analisar({
+        entrada: "a"
+        gramática: {
+          tipo: "faixa"
+          de: "a"
+          até: "c"
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          1
+        ])
+        uniteste.iguais([
+          resultado.valor
+          "a"
+        ])
+      ]
+    )
+    ...(
+      resultado = dialeto.analisar({
+        entrada: "c"
+        gramática: {
+          tipo: "faixa"
+          de: "a"
+          até: "c"
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          1
+        ])
+        uniteste.iguais([
+          resultado.valor
+          "c"
+        ])
+      ]
+    )
+    ...(
+      resultado = dialeto.analisar({
+        entrada: "d"
+        gramática: {
+          tipo: "faixa"
+          de: "a"
+          até: "c"
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          0
+        ])
+      ]
+    )
+    ...(
+      resultado = dialeto.analisar({
+        entrada: "Z"
+        gramática: {
+          tipo: "faixa"
+          de: "a"
+          até: "c"
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          0
+        ])
+      ]
+    )
   ]
 })
