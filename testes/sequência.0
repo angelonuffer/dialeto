@@ -181,5 +181,49 @@ uniteste.descrever({
         ])
       ]
     )
+    ...(
+      resultado = dialeto.analisar({
+        entrada: "ab"
+        gramática: {
+          tipo: "sequência"
+          formato: "texto"
+          partes: [
+            { tipo: "símbolo" texto: "a" }
+            {
+              tipo: "sequência"
+              formato: "lista"
+              partes: [
+                { tipo: "símbolo" texto: "b" }
+              ]
+            }
+          ]
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          0
+        ])
+      ]
+    )
+    ...(
+      resultado = dialeto.analisar({
+        entrada: "a"
+        gramática: {
+          tipo: "sequência"
+          formato: "lista"
+          partes: [
+            { tipo: "símbolo" texto: "" }
+            { tipo: "símbolo" texto: "a" }
+          ]
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          0
+        ])
+      ]
+    )
   ]
 })

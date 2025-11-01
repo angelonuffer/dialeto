@@ -51,14 +51,25 @@
         posFim: resultadoPartes.posAtual
       }
       | (gramática.formato == "texto") = (
-        separador = | (gramática.separador == nulo) = ""
-                    | gramática.separador
+        verificarTexto = { valores } =>
+          | (valores[.] == 0) = 1
+          | (valores[0][.] == 0) = verificarTexto({ valores: valores[1:] })
+          | (valores[0][0] >= 0) = verificarTexto({ valores: valores[1:] })
+          | 0
         
-        {
-          sucesso: 1
-          valor: resultadoPartes.valores * separador
-          posFim: resultadoPartes.posAtual
+        | (verificarTexto({ valores: resultadoPartes.valores }) == 0) = {
+          sucesso: 0
         }
+        | (
+          separador = | (gramática.separador == nulo) = ""
+                      | gramática.separador
+          
+          {
+            sucesso: 1
+            valor: resultadoPartes.valores * separador
+            posFim: resultadoPartes.posAtual
+          }
+        )
       )
       | {
         sucesso: 0
