@@ -422,6 +422,7 @@ uniteste.descrever({
           tipo: "repetição"
           gramática: { tipo: "símbolo" texto: "a" }
           formato: "texto"
+          minimo: 1
         }
       })
       [
@@ -442,6 +443,7 @@ uniteste.descrever({
           tipo: "repetição"
           gramática: { tipo: "símbolo" texto: "a" }
           formato: "texto"
+          minimo: 1
         }
       })
       [
@@ -458,6 +460,7 @@ uniteste.descrever({
           tipo: "repetição"
           gramática: { tipo: "faixa" de: "a" até: "z" }
           formato: "lista"
+          minimo: 1
         }
       })
       [

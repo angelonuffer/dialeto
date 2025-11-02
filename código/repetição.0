@@ -49,6 +49,7 @@
       sub = gramática.gramática
       fmt = gramática.formato
       max = gramática.maximo
+      min_padrao = 1
       repetição.0.analisar_com_resultado({
         entrada: entrada
         pos: pos
@@ -56,7 +57,7 @@
           subgramática: sub
           formato: fmt
         }
-        minimo: 1
+        minimo: min_padrao
         maximo: max
         valores: []
         resultado: analisar_de({ entrada: entrada pos: pos gramática: sub })
