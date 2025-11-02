@@ -16,6 +16,7 @@ dialeto = {
       pos: pos + gramática.texto[.]
     }
     | (gramática.tipo == "sequência") = dialeto.analisar_sequência({ entrada: entrada pos: pos gramática: gramática índice: 0 valores: [] })
+    | (gramática.tipo == "alternativa") = dialeto.analisar_alternativa({ entrada: entrada pos: pos gramática: gramática índice: 0 })
     | {
       sucesso: 0
     }
@@ -52,6 +53,22 @@ dialeto = {
       sucesso: 0
     }
 
+  analisar_alternativa: { entrada pos gramática índice } =>
+    | (índice >= gramática.opções[.]) = {
+      sucesso: 0
+    }
+    | dialeto.analisar_alternativa_com_resultado({
+      entrada: entrada
+      pos: pos
+      gramática: gramática
+      índice: índice
+      resultado: dialeto.analisar_de({ entrada: entrada pos: pos gramática: gramática.opções[índice] })
+    })
+
+  analisar_alternativa_com_resultado: { entrada pos gramática índice resultado } =>
+    | (resultado.sucesso == 1) = resultado
+    | dialeto.analisar_alternativa({ entrada: entrada pos: pos gramática: gramática índice: índice + 1 })
+
   analisar: { entrada gramática } =>
     | (gramática.tipo == "faixa" & gramática.de <= entrada & gramática.até >= entrada) = {
       sucesso: 1
@@ -66,6 +83,13 @@ dialeto = {
       valor: dialeto.analisar_de({ entrada: entrada pos: 0 gramática: gramática }).valor
     }
     | (gramática.tipo == "sequência") = {
+      sucesso: 0
+    }
+    | (gramática.tipo == "alternativa" & dialeto.analisar_de({ entrada: entrada pos: 0 gramática: gramática }).sucesso == 1 & dialeto.analisar_de({ entrada: entrada pos: 0 gramática: gramática }).pos == entrada[.]) = {
+      sucesso: 1
+      valor: dialeto.analisar_de({ entrada: entrada pos: 0 gramática: gramática }).valor
+    }
+    | (gramática.tipo == "alternativa") = {
       sucesso: 0
     }
     | {

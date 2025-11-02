@@ -23,6 +23,9 @@ Esta função analisa a entrada fornecida de acordo com a gramática especificad
     - **gramática.partes** (lista) - Lista de objetos de gramática. Cada item é outra gramática válida.
     - **gramática.formato** (texto) - Formato de retorno, pode ser "texto" ou "lista".
 
+  - Se **gramática.tipo** == "alternativa":
+    - **gramática.opções** (lista) - Lista de objetos de gramática. Cada item é outra gramática válida. A análise terá sucesso se qualquer uma das opções corresponder à entrada.
+
 ### Retorno
 
 - **retorno** (objeto) - Um objeto contendo o resultado da análise.
