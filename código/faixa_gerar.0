@@ -1,0 +1,20 @@
+{
+  gerar_de: { valor pos gramática } =>
+    | (pos < valor[.] & gramática.de <= valor[pos:pos+1] & valor[pos:pos+1] <= gramática.até) = {
+      sucesso: 1
+      saída: valor[pos:pos+1]
+      pos: pos + 1
+    }
+    | {
+      sucesso: 0
+    }
+
+  gerar: { valor gramática } =>
+    | (valor[.] == 1 & gramática.de <= valor & valor <= gramática.até) = {
+      sucesso: 1
+      saída: valor
+    }
+    | {
+      sucesso: 0
+    }
+}

@@ -1,0 +1,195 @@
+uniteste = uniteste.0
+dialeto = ../código/0
+
+uniteste.descrever({
+  nome: "gerar"
+  testes: [
+    ...(
+      resultado = dialeto.gerar({
+        valor: "hello"
+        gramática: {
+          tipo: "símbolo"
+          texto: "hello"
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          1
+        ])
+        uniteste.iguais([
+          resultado.saída
+          "hello"
+        ])
+      ]
+    )
+    ...(
+      resultado = dialeto.gerar({
+        valor: "a"
+        gramática: {
+          tipo: "faixa"
+          de: "a"
+          até: "z"
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          1
+        ])
+        uniteste.iguais([
+          resultado.saída
+          "a"
+        ])
+      ]
+    )
+    ...(
+      resultado = dialeto.gerar({
+        valor: "ab"
+        gramática: {
+          tipo: "sequência"
+          partes: [
+            { tipo: "símbolo" texto: "a" }
+            { tipo: "símbolo" texto: "b" }
+          ]
+          formato: "texto"
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          1
+        ])
+        uniteste.iguais([
+          resultado.saída
+          "ab"
+        ])
+      ]
+    )
+    ...(
+      resultado = dialeto.gerar({
+        valor: ["a" "b"]
+        gramática: {
+          tipo: "sequência"
+          partes: [
+            { tipo: "símbolo" texto: "a" }
+            { tipo: "símbolo" texto: "b" }
+          ]
+          formato: "lista"
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          1
+        ])
+        uniteste.iguais([
+          resultado.saída
+          "ab"
+        ])
+      ]
+    )
+    ...(
+      resultado = dialeto.gerar({
+        valor: "a"
+        gramática: {
+          tipo: "alternativa"
+          opções: [
+            { tipo: "símbolo" texto: "a" }
+            { tipo: "símbolo" texto: "b" }
+          ]
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          1
+        ])
+        uniteste.iguais([
+          resultado.saída
+          "a"
+        ])
+      ]
+    )
+    ...(
+      resultado = dialeto.gerar({
+        valor: ""
+        gramática: {
+          tipo: "opcional"
+          gramática: { tipo: "símbolo" texto: "a" }
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          1
+        ])
+        uniteste.iguais([
+          resultado.saída
+          ""
+        ])
+      ]
+    )
+    ...(
+      resultado = dialeto.gerar({
+        valor: "a"
+        gramática: {
+          tipo: "opcional"
+          gramática: { tipo: "símbolo" texto: "a" }
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          1
+        ])
+        uniteste.iguais([
+          resultado.saída
+          "a"
+        ])
+      ]
+    )
+    ...(
+      resultado = dialeto.gerar({
+        valor: "aaa"
+        gramática: {
+          tipo: "repetição"
+          gramática: { tipo: "símbolo" texto: "a" }
+          formato: "texto"
+          minimo: 1
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          1
+        ])
+        uniteste.iguais([
+          resultado.saída
+          "aaa"
+        ])
+      ]
+    )
+    ...(
+      resultado = dialeto.gerar({
+        valor: ["a" "a" "a"]
+        gramática: {
+          tipo: "repetição"
+          gramática: { tipo: "símbolo" texto: "a" }
+          formato: "lista"
+          minimo: 1
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          1
+        ])
+        uniteste.iguais([
+          resultado.saída
+          "aaa"
+        ])
+      ]
+    )
+  ]
+})

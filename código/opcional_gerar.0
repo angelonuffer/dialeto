@@ -1,0 +1,27 @@
+{
+  gerar_de_com_resultado: { pos resultado } =>
+    | (resultado.sucesso == 1) = resultado
+    | {
+      sucesso: 1
+      saída: ""
+      pos: pos
+    }
+
+  gerar_de: { valor pos gramática gerar_de_de } =>
+    | (pos >= valor[.]) = {
+      sucesso: 1
+      saída: ""
+      pos: pos
+    }
+    | opcional_gerar.0.gerar_de_com_resultado({
+      pos: pos
+      resultado: gerar_de_de({ valor: valor pos: pos gramática: gramática.gramática })
+    })
+
+  gerar: { valor gramática gerar_de gerar_de_de } =>
+    | (valor == "") = {
+      sucesso: 1
+      saída: ""
+    }
+    | gerar_de({ valor: valor gramática: gramática.gramática })
+}

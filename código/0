@@ -4,6 +4,12 @@ sequência = sequência.0
 alternativa = alternativa.0
 opcional = opcional.0
 repetição = repetição.0
+faixa_gerar = faixa_gerar.0
+símbolo_gerar = símbolo_gerar.0
+sequência_gerar = sequência_gerar.0
+alternativa_gerar = alternativa_gerar.0
+opcional_gerar = opcional_gerar.0
+repetição_gerar = repetição_gerar.0
 
 dialeto = {
   analisar_de: { entrada pos gramática } =>
@@ -55,8 +61,35 @@ dialeto = {
     | {
       sucesso: 0
     }
+
+  gerar_de_de: { valor pos gramática } =>
+    | (gramática.tipo == "faixa") = faixa_gerar.gerar_de({ valor: valor pos: pos gramática: gramática })
+    | (gramática.tipo == "símbolo") = símbolo_gerar.gerar_de({ valor: valor pos: pos gramática: gramática })
+    | (gramática.tipo == "sequência") = sequência_gerar.gerar_de({ valor: valor pos: pos gramática: gramática gerar_de_de: dialeto.gerar_de_de })
+    | (gramática.tipo == "alternativa") = alternativa_gerar.gerar_de({ valor: valor pos: pos índice: 0 gramática: gramática gerar_de_de: dialeto.gerar_de_de })
+    | (gramática.tipo == "opcional") = opcional_gerar.gerar_de({ valor: valor pos: pos gramática: gramática gerar_de_de: dialeto.gerar_de_de })
+    | (gramática.tipo == "repetição") = repetição_gerar.gerar_de({ valor: valor pos: pos gramática: gramática gerar_de_de: dialeto.gerar_de_de })
+    | {
+      sucesso: 0
+      pos: pos
+    }
+
+  gerar_de: { valor gramática } =>
+    | (gramática.tipo == "faixa") = faixa_gerar.gerar({ valor: valor gramática: gramática })
+    | (gramática.tipo == "símbolo") = símbolo_gerar.gerar({ valor: valor gramática: gramática })
+    | (gramática.tipo == "sequência") = sequência_gerar.gerar({ valor: valor gramática: gramática gerar_de: dialeto.gerar_de gerar_de_de: dialeto.gerar_de_de })
+    | (gramática.tipo == "alternativa") = alternativa_gerar.gerar({ valor: valor índice: 0 gramática: gramática gerar_de: dialeto.gerar_de gerar_de_de: dialeto.gerar_de_de })
+    | (gramática.tipo == "opcional") = opcional_gerar.gerar({ valor: valor gramática: gramática gerar_de: dialeto.gerar_de gerar_de_de: dialeto.gerar_de_de })
+    | (gramática.tipo == "repetição") = repetição_gerar.gerar({ valor: valor gramática: gramática gerar_de: dialeto.gerar_de gerar_de_de: dialeto.gerar_de_de })
+    | {
+      sucesso: 0
+    }
+
+  gerar: { valor gramática } =>
+    dialeto.gerar_de({ valor: valor gramática: gramática })
 }
 
 {
   analisar: dialeto.analisar
+  gerar: dialeto.gerar
 }
