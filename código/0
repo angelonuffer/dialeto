@@ -73,4 +73,6 @@ dialeto = {
     }
 }
 
-dialeto
+{
+  analisar: dialeto.analisar
+}
