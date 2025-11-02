@@ -60,6 +60,7 @@ dialeto = {
       sucesso: 0
       pos: pos
     }
+    | (gramática.formato == "texto" & gramática.partes[índice].tipo == "sequência" & gramática.partes[índice].formato == "texto") = dialeto.analisar_sequência({ entrada: entrada pos: resultado.pos gramática: gramática índice: índice + 1 valores: [...valores resultado.valor] })
     | dialeto.analisar_sequência({ entrada: entrada pos: resultado.pos gramática: gramática índice: índice + 1 valores: [...valores resultado.valor] })
 
   analisar_sequência: { entrada pos gramática índice valores } =>
