@@ -1,20 +1,20 @@
+analisar_de = { entrada pos gramática } =>
+  | (gramática.tipo == "faixa" & pos < entrada[.] & gramática.de <= entrada[pos] & gramática.até >= entrada[pos]) = {
+    sucesso: 1
+    valor: entrada[pos]
+    pos: pos + 1
+  }
+  | (gramática.tipo == "símbolo" & pos + gramática.texto[.] <= entrada[.] & entrada[pos:pos + gramática.texto[.]] == gramática.texto) = {
+    sucesso: 1
+    valor: gramática.texto
+    pos: pos + gramática.texto[.]
+  }
+  | (gramática.tipo == "sequência") = dialeto.analisarSequência({ entrada: entrada pos: pos gramática: gramática índice: 0 valores: [] })
+  | {
+    sucesso: 0
+  }
+
 dialeto = {
-  analisarDe: { entrada pos gramática } =>
-    | (gramática.tipo == "faixa" & pos < entrada[.] & gramática.de <= entrada[pos] & gramática.até >= entrada[pos]) = {
-      sucesso: 1
-      valor: entrada[pos]
-      pos: pos + 1
-    }
-    | (gramática.tipo == "símbolo" & pos + gramática.texto[.] <= entrada[.] & entrada[pos:pos + gramática.texto[.]] == gramática.texto) = {
-      sucesso: 1
-      valor: gramática.texto
-      pos: pos + gramática.texto[.]
-    }
-    | (gramática.tipo == "sequência") = dialeto.analisarSequência({ entrada: entrada pos: pos gramática: gramática índice: 0 valores: [] })
-    | {
-      sucesso: 0
-    }
-  
   analisarSequênciaComResultado: { entrada pos gramática índice valores resultado } =>
     | (resultado.sucesso == 0) = {
       sucesso: 0
@@ -41,7 +41,7 @@ dialeto = {
       gramática: gramática
       índice: índice
       valores: valores
-      resultado: dialeto.analisarDe({ entrada: entrada pos: pos gramática: gramática.partes[índice] })
+      resultado: analisar_de({ entrada: entrada pos: pos gramática: gramática.partes[índice] })
     })
     | {
       sucesso: 0
@@ -57,7 +57,7 @@ dialeto = {
       valor: entrada
     }
     | (gramática.tipo == "sequência") = (
-      resultado = dialeto.analisarDe({ entrada: entrada pos: 0 gramática: gramática })
+      resultado = analisar_de({ entrada: entrada pos: 0 gramática: gramática })
       resultado.sucesso == 1 & resultado.pos == entrada[.] ? {
         sucesso: 1
         valor: resultado.valor
