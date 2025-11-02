@@ -15,6 +15,15 @@ dialeto = {
       sucesso: 0
     }
   
+  analisarSequênciaComResultado: { entrada pos gramática índice valores resultado } =>
+    | (resultado.sucesso == 0) = {
+      sucesso: 0
+    }
+    | (gramática.formato == "texto" & gramática.partes[índice].tipo == "sequência" & gramática.partes[índice].formato == "lista") = {
+      sucesso: 0
+    }
+    | dialeto.analisarSequência({ entrada: entrada pos: resultado.pos gramática: gramática índice: índice + 1 valores: [...valores resultado.valor] })
+
   analisarSequência: { entrada pos gramática índice valores } =>
     | (índice >= gramática.partes[.] & gramática.formato == "texto") = {
       sucesso: 1
@@ -26,15 +35,14 @@ dialeto = {
       valor: valores
       pos: pos
     }
-    | (índice < gramática.partes[.]) = (
-      parte = gramática.partes[índice]
-      resultado = dialeto.analisarDe({ entrada: entrada pos: pos gramática: parte })
-      resultado.sucesso == 0 ? {
-        sucesso: 0
-      } : (gramática.formato == "texto" & parte.tipo == "sequência" & parte.formato == "lista") ? {
-        sucesso: 0
-      } : dialeto.analisarSequência({ entrada: entrada pos: resultado.pos gramática: gramática índice: índice + 1 valores: [...valores resultado.valor] })
-    )
+    | (índice < gramática.partes[.]) = dialeto.analisarSequênciaComResultado({
+      entrada: entrada
+      pos: pos
+      gramática: gramática
+      índice: índice
+      valores: valores
+      resultado: dialeto.analisarDe({ entrada: entrada pos: pos gramática: gramática.partes[índice] })
+    })
     | {
       sucesso: 0
     }
