@@ -44,7 +44,7 @@ uniteste.descrever({
           resultado.sucesso
           1
         ])
-        uniteste.iguais([
+        uniteste.listas_iguais([
           resultado.valor
           ["a" "b"]
         ])
@@ -92,7 +92,7 @@ uniteste.descrever({
           resultado.sucesso
           1
         ])
-        uniteste.iguais([
+        uniteste.listas_iguais([
           resultado.valor
           ["a" "b" "c"]
         ])
