@@ -272,5 +272,185 @@ uniteste.descrever({
         ])
       ]
     )
+    ...(
+      resultado = dialeto.analisar({
+        entrada: "abcd"
+        gramática: {
+          tipo: "sequência"
+          partes: [
+            {
+              tipo: "sequência"
+              partes: [
+                { tipo: "símbolo" texto: "ab" }
+              ]
+              formato: "texto"
+            }
+            {
+              tipo: "sequência"
+              partes: [
+                { tipo: "símbolo" texto: "cd" }
+              ]
+              formato: "texto"
+            }
+          ]
+          formato: "texto"
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          1
+        ])
+        uniteste.iguais([
+          resultado.valor
+          "abcd"
+        ])
+      ]
+    )
+    ...(
+      resultado = dialeto.analisar({
+        entrada: "abcd"
+        gramática: {
+          tipo: "sequência"
+          partes: [
+            {
+              tipo: "sequência"
+              partes: [
+                { tipo: "símbolo" texto: "ab" }
+              ]
+              formato: "texto"
+            }
+            {
+              tipo: "sequência"
+              partes: [
+                { tipo: "símbolo" texto: "cd" }
+              ]
+              formato: "texto"
+            }
+          ]
+          formato: "lista"
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          1
+        ])
+        uniteste.listas_iguais([
+          resultado.valor
+          ["ab" "cd"]
+        ])
+      ]
+    )
+    ...(
+      resultado = dialeto.analisar({
+        entrada: "abcd"
+        gramática: {
+          tipo: "sequência"
+          partes: [
+            {
+              tipo: "sequência"
+              partes: [
+                { tipo: "símbolo" texto: "a" }
+                { tipo: "símbolo" texto: "b" }
+              ]
+              formato: "lista"
+            }
+            {
+              tipo: "sequência"
+              partes: [
+                { tipo: "símbolo" texto: "c" }
+                { tipo: "símbolo" texto: "d" }
+              ]
+              formato: "lista"
+            }
+          ]
+          formato: "lista"
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          1
+        ])
+        uniteste.iguais([
+          resultado.valor[.]
+          2
+        ])
+        uniteste.listas_iguais([
+          resultado.valor[0]
+          ["a" "b"]
+        ])
+        uniteste.listas_iguais([
+          resultado.valor[1]
+          ["c" "d"]
+        ])
+      ]
+    )
+    ...(
+      resultado = dialeto.analisar({
+        entrada: "abcd"
+        gramática: {
+          tipo: "sequência"
+          partes: [
+            {
+              tipo: "sequência"
+              partes: [
+                { tipo: "símbolo" texto: "a" }
+                { tipo: "símbolo" texto: "b" }
+              ]
+              formato: "lista"
+            }
+            { tipo: "símbolo" texto: "cd" }
+          ]
+          formato: "texto"
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          0
+        ])
+      ]
+    )
+    ...(
+      resultado = dialeto.analisar({
+        entrada: "abc123"
+        gramática: {
+          tipo: "sequência"
+          partes: [
+            {
+              tipo: "sequência"
+              partes: [
+                { tipo: "faixa" de: "a" até: "z" }
+                { tipo: "faixa" de: "a" até: "z" }
+                { tipo: "faixa" de: "a" até: "z" }
+              ]
+              formato: "texto"
+            }
+            {
+              tipo: "sequência"
+              partes: [
+                { tipo: "faixa" de: "0" até: "9" }
+                { tipo: "faixa" de: "0" até: "9" }
+                { tipo: "faixa" de: "0" até: "9" }
+              ]
+              formato: "texto"
+            }
+          ]
+          formato: "texto"
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          1
+        ])
+        uniteste.iguais([
+          resultado.valor
+          "abc123"
+        ])
+      ]
+    )
   ]
 })
