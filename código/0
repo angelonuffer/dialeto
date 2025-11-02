@@ -1,4 +1,44 @@
-{
+dialeto = {
+  analisarDe: { entrada pos gramática } =>
+    | (gramática.tipo == "faixa" & pos < entrada[.] & gramática.de <= entrada[pos] & gramática.até >= entrada[pos]) = {
+      sucesso: 1
+      valor: entrada[pos]
+      pos: pos + 1
+    }
+    | (gramática.tipo == "símbolo" & pos + gramática.texto[.] <= entrada[.] & entrada[pos:pos + gramática.texto[.]] == gramática.texto) = {
+      sucesso: 1
+      valor: gramática.texto
+      pos: pos + gramática.texto[.]
+    }
+    | (gramática.tipo == "sequência") = dialeto.analisarSequência({ entrada: entrada pos: pos gramática: gramática índice: 0 valores: [] })
+    | {
+      sucesso: 0
+    }
+  
+  analisarSequência: { entrada pos gramática índice valores } =>
+    | (índice >= gramática.partes[.] & gramática.formato == "texto") = {
+      sucesso: 1
+      valor: {...valores} * ""
+      pos: pos
+    }
+    | (índice >= gramática.partes[.] & gramática.formato == "lista") = {
+      sucesso: 1
+      valor: valores
+      pos: pos
+    }
+    | (índice < gramática.partes[.]) = (
+      parte = gramática.partes[índice]
+      resultado = dialeto.analisarDe({ entrada: entrada pos: pos gramática: parte })
+      resultado.sucesso == 0 ? {
+        sucesso: 0
+      } : (gramática.formato == "texto" & parte.tipo == "sequência" & parte.formato == "lista") ? {
+        sucesso: 0
+      } : dialeto.analisarSequência({ entrada: entrada pos: resultado.pos gramática: gramática índice: índice + 1 valores: [...valores resultado.valor] })
+    )
+    | {
+      sucesso: 0
+    }
+  
   analisar: { entrada gramática } =>
     | (gramática.tipo == "faixa" & gramática.de <= entrada & gramática.até >= entrada) = {
       sucesso: 1
@@ -8,7 +48,18 @@
       sucesso: 1
       valor: entrada
     }
+    | (gramática.tipo == "sequência") = (
+      resultado = dialeto.analisarDe({ entrada: entrada pos: 0 gramática: gramática })
+      resultado.sucesso == 1 & resultado.pos == entrada[.] ? {
+        sucesso: 1
+        valor: resultado.valor
+      } : {
+        sucesso: 0
+      }
+    )
     | {
       sucesso: 0
     }
 }
+
+dialeto
