@@ -1,0 +1,16 @@
+{
+  analisar: { entrada pos gramática analisar_de } =>
+    opcional.0.analisar_com_resultado({
+      entrada: entrada
+      pos: pos
+      resultado: analisar_de({ entrada: entrada pos: pos gramática: gramática.gramática })
+    })
+
+  analisar_com_resultado: { entrada pos resultado } =>
+    | (resultado.sucesso == 1) = resultado
+    | {
+      sucesso: 1
+      valor: ""
+      pos: pos
+    }
+}

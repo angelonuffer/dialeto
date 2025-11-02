@@ -1,0 +1,35 @@
+{
+  analisar_com_resultado: { entrada pos gramática índice valores resultado analisar_de } =>
+    | (resultado.sucesso == 0) = resultado
+    | (gramática.formato == "texto" & gramática.partes[índice].tipo == "sequência" & gramática.partes[índice].formato == "lista") = {
+      sucesso: 0
+      pos: pos
+    }
+    | (gramática.formato == "texto" & gramática.partes[índice].tipo == "sequência" & gramática.partes[índice].formato == "texto") = sequência.0.analisar({ entrada: entrada pos: resultado.pos gramática: gramática índice: índice + 1 valores: [...valores resultado.valor] analisar_de: analisar_de })
+    | sequência.0.analisar({ entrada: entrada pos: resultado.pos gramática: gramática índice: índice + 1 valores: [...valores resultado.valor] analisar_de: analisar_de })
+
+  analisar: { entrada pos gramática índice valores analisar_de } =>
+    | (índice >= gramática.partes[.] & gramática.formato == "texto") = {
+      sucesso: 1
+      valor: {...valores} * ""
+      pos: pos
+    }
+    | (índice >= gramática.partes[.] & gramática.formato == "lista") = {
+      sucesso: 1
+      valor: valores
+      pos: pos
+    }
+    | (índice < gramática.partes[.]) = sequência.0.analisar_com_resultado({
+      entrada: entrada
+      pos: pos
+      gramática: gramática
+      índice: índice
+      valores: valores
+      resultado: analisar_de({ entrada: entrada pos: pos gramática: gramática.partes[índice] })
+      analisar_de: analisar_de
+    })
+    | {
+      sucesso: 0
+      pos: pos
+    }
+}

@@ -1,0 +1,26 @@
+{
+  analisar: { entrada pos gramática } =>
+    | (pos < entrada[.] & gramática.de <= entrada[pos:pos+1] & entrada[pos:pos+1] <= gramática.até) = {
+      sucesso: 1
+      valor: entrada[pos:pos+1]
+      pos: pos + 1
+    }
+    | (pos < entrada[.]) = (
+      mensagem_esperado = ["faixa de '" gramática.de "' até '" gramática.até "'"]
+      {
+        sucesso: 0
+        pos: pos
+        esperado: {...mensagem_esperado} * ""
+        encontrado: entrada[pos:pos+1]
+      }
+    )
+    | (
+      mensagem_esperado = ["faixa de '" gramática.de "' até '" gramática.até "'"]
+      {
+        sucesso: 0
+        pos: pos
+        esperado: {...mensagem_esperado} * ""
+        encontrado: "fim da entrada"
+      }
+    )
+}
