@@ -46,7 +46,7 @@ analisar_sequência = { entrada pos gramática índice valores } =>
     sucesso: 0
   }
 
-dialeto = {
+{
   analisar: { entrada gramática } =>
     | (gramática.tipo == "faixa" & gramática.de <= entrada & gramática.até >= entrada) = {
       sucesso: 1
@@ -69,5 +69,3 @@ dialeto = {
       sucesso: 0
     }
 }
-
-dialeto
