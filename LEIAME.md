@@ -33,7 +33,7 @@ Esta função analisa a entrada fornecida de acordo com a gramática especificad
 
 - **retorno** (objeto) - Um objeto contendo o resultado da análise.
   - **retorno.sucesso** (número) - Indica se a análise foi bem-sucedida (1) ou não (0).
-  - **retorno.valor** (texto) - O valor correspondente à entrada analisada, se a análise for bem-sucedida.
+  - **retorno.valor** (texto | lista) - O valor correspondente à entrada analisada, se a análise for bem-sucedida.
 
   - **retorno.pos** (número) - A posição na entrada onde a análise falhou.
   - **retorno.esperado** (texto) - A descrição do que era esperado pela gramática.
