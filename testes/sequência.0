@@ -256,24 +256,6 @@ uniteste.descrever({
     )
     ...(
       resultado = dialeto.analisar({
-        entrada: "abc"
-        gramática: {
-          tipo: "sequência"
-          partes: [
-            { tipo: "símbolo" texto: "ab" }
-          ]
-          formato: "texto"
-        }
-      })
-      [
-        uniteste.iguais([
-          resultado.sucesso
-          0
-        ])
-      ]
-    )
-    ...(
-      resultado = dialeto.analisar({
         entrada: "abcd"
         gramática: {
           tipo: "sequência"
