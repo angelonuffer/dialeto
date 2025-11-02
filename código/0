@@ -9,7 +9,7 @@ analisar_de = { entrada pos gramática } =>
     valor: gramática.texto
     pos: pos + gramática.texto[.]
   }
-  | (gramática.tipo == "sequência") = dialeto.analisarSequência({ entrada: entrada pos: pos gramática: gramática índice: 0 valores: [] })
+  | (gramática.tipo == "sequência") = analisar_sequência({ entrada: entrada pos: pos gramática: gramática índice: 0 valores: [] })
   | {
     sucesso: 0
   }
@@ -21,32 +21,32 @@ analisar_sequência_com_resultado = { entrada pos gramática índice valores res
   | (gramática.formato == "texto" & gramática.partes[índice].tipo == "sequência" & gramática.partes[índice].formato == "lista") = {
     sucesso: 0
   }
-  | dialeto.analisarSequência({ entrada: entrada pos: resultado.pos gramática: gramática índice: índice + 1 valores: [...valores resultado.valor] })
+  | analisar_sequência({ entrada: entrada pos: resultado.pos gramática: gramática índice: índice + 1 valores: [...valores resultado.valor] })
+
+analisar_sequência = { entrada pos gramática índice valores } =>
+  | (índice >= gramática.partes[.] & gramática.formato == "texto") = {
+    sucesso: 1
+    valor: {...valores} * ""
+    pos: pos
+  }
+  | (índice >= gramática.partes[.] & gramática.formato == "lista") = {
+    sucesso: 1
+    valor: valores
+    pos: pos
+  }
+  | (índice < gramática.partes[.]) = analisar_sequência_com_resultado({
+    entrada: entrada
+    pos: pos
+    gramática: gramática
+    índice: índice
+    valores: valores
+    resultado: analisar_de({ entrada: entrada pos: pos gramática: gramática.partes[índice] })
+  })
+  | {
+    sucesso: 0
+  }
 
 dialeto = {
-  analisarSequência: { entrada pos gramática índice valores } =>
-    | (índice >= gramática.partes[.] & gramática.formato == "texto") = {
-      sucesso: 1
-      valor: {...valores} * ""
-      pos: pos
-    }
-    | (índice >= gramática.partes[.] & gramática.formato == "lista") = {
-      sucesso: 1
-      valor: valores
-      pos: pos
-    }
-    | (índice < gramática.partes[.]) = analisar_sequência_com_resultado({
-      entrada: entrada
-      pos: pos
-      gramática: gramática
-      índice: índice
-      valores: valores
-      resultado: analisar_de({ entrada: entrada pos: pos gramática: gramática.partes[índice] })
-    })
-    | {
-      sucesso: 0
-    }
-  
   analisar: { entrada gramática } =>
     | (gramática.tipo == "faixa" & gramática.de <= entrada & gramática.até >= entrada) = {
       sucesso: 1
