@@ -17,6 +17,7 @@ dialeto = {
     }
     | (gramática.tipo == "sequência") = dialeto.analisar_sequência({ entrada: entrada pos: pos gramática: gramática índice: 0 valores: [] })
     | (gramática.tipo == "alternativa") = dialeto.analisar_alternativa({ entrada: entrada pos: pos gramática: gramática índice: 0 })
+    | (gramática.tipo == "opcional") = dialeto.analisar_opcional({ entrada: entrada pos: pos gramática: gramática })
     | {
       sucesso: 0
     }
@@ -69,6 +70,21 @@ dialeto = {
     | (resultado.sucesso == 1) = resultado
     | dialeto.analisar_alternativa({ entrada: entrada pos: pos gramática: gramática índice: índice + 1 })
 
+  analisar_opcional: { entrada pos gramática } =>
+    dialeto.analisar_opcional_com_resultado({
+      entrada: entrada
+      pos: pos
+      resultado: dialeto.analisar_de({ entrada: entrada pos: pos gramática: gramática.gramática })
+    })
+
+  analisar_opcional_com_resultado: { entrada pos resultado } =>
+    | (resultado.sucesso == 1) = resultado
+    | {
+      sucesso: 1
+      valor: ""
+      pos: pos
+    }
+
   analisar: { entrada gramática } =>
     | (gramática.tipo == "faixa" & gramática.de <= entrada & gramática.até >= entrada) = {
       sucesso: 1
@@ -90,6 +106,13 @@ dialeto = {
       valor: dialeto.analisar_de({ entrada: entrada pos: 0 gramática: gramática }).valor
     }
     | (gramática.tipo == "alternativa") = {
+      sucesso: 0
+    }
+    | (gramática.tipo == "opcional" & dialeto.analisar_de({ entrada: entrada pos: 0 gramática: gramática }).sucesso == 1 & dialeto.analisar_de({ entrada: entrada pos: 0 gramática: gramática }).pos == entrada[.]) = {
+      sucesso: 1
+      valor: dialeto.analisar_de({ entrada: entrada pos: 0 gramática: gramática }).valor
+    }
+    | (gramática.tipo == "opcional") = {
       sucesso: 0
     }
     | {

@@ -26,6 +26,9 @@ Esta função analisa a entrada fornecida de acordo com a gramática especificad
   - Se **gramática.tipo** == "alternativa":
     - **gramática.opções** (lista) - Lista de objetos de gramática. Cada item é outra gramática válida. A análise terá sucesso se qualquer uma das opções corresponder à entrada.
 
+  - Se **gramática.tipo** == "opcional":
+    - **gramática.gramática** (objeto) - Objeto de gramática. A análise terá sucesso se a gramática corresponder à entrada ou se a entrada for vazia, retornando uma string vazia neste caso.
+
 ### Retorno
 
 - **retorno** (objeto) - Um objeto contendo o resultado da análise.
