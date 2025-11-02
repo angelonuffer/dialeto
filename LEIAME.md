@@ -20,8 +20,8 @@ Esta função analisa a entrada fornecida de acordo com a gramática especificad
     - **gramática.até** (texto) - O limite superior da faixa.
 
   - Se **gramática.tipo** == "sequência":
-    - **gramática.partes** (lista) - Lista de objetos de gramática. Cada item é outra gramática válida.
-    - **gramática.formato** (texto) - Formato de retorno, pode ser "texto" ou "lista".
+    - **gramática.partes** (lista) - Lista de objetos de gramática. Cada item é outra gramática válida. Se **gramática.formato** == "objeto", cada item deve ter os campos **nome** (texto - chave de saída/entrada) e **gramatica** (objeto - sub-gramática).
+    - **gramática.formato** (texto) - Formato de retorno, pode ser "texto", "lista" ou "objeto".
 
   - Se **gramática.tipo** == "alternativa":
     - **gramática.opções** (lista) - Lista de objetos de gramática. Cada item é outra gramática válida. A análise terá sucesso se qualquer uma das opções corresponder à entrada.
@@ -39,7 +39,7 @@ Esta função analisa a entrada fornecida de acordo com a gramática especificad
 
 - **retorno** (objeto) - Um objeto contendo o resultado da análise.
   - **retorno.sucesso** (número) - Indica se a análise foi bem-sucedida (1) ou não (0).
-  - **retorno.valor** (texto | lista) - O valor correspondente à entrada analisada, se a análise for bem-sucedida.
+  - **retorno.valor** (texto | lista | objeto) - O valor correspondente à entrada analisada, se a análise for bem-sucedida. Se **gramática.formato** == "objeto", retorna um objeto mapeando nomes de partes para valores analisados.
 
   - **retorno.pos** (número) - A posição na entrada onde a análise falhou.
   - **retorno.esperado** (texto) - A descrição do que era esperado pela gramática.
@@ -51,7 +51,7 @@ Esta função faz o inverso de `dialeto.analisar`. Ela recebe um valor e uma gra
 
 ### Parâmetros
 
-- **valor** (texto | lista) - O valor a ser validado e convertido em saída.
+- **valor** (texto | lista | objeto) - O valor a ser validado e convertido em saída. Se a gramática usa formato "objeto", deve ser um objeto mapeando nomes de partes para valores.
 - **gramática** (objeto) - O objeto de gramática que define as regras de geração. Mesma estrutura da função `dialeto.analisar`.
   - **gramática.tipo** (texto) - O tipo de gramática a ser utilizada.
 
@@ -63,10 +63,11 @@ Esta função faz o inverso de `dialeto.analisar`. Ela recebe um valor e uma gra
     - **gramática.até** (texto) - O limite superior da faixa. O valor deve ser um caractere único dentro desta faixa.
 
   - Se **gramática.tipo** == "sequência":
-    - **gramática.partes** (lista) - Lista de objetos de gramática. Cada item é outra gramática válida.
+    - **gramática.partes** (lista) - Lista de objetos de gramática. Cada item é outra gramática válida. Se **gramática.formato** == "objeto", cada item deve ter os campos **nome** (texto - chave de entrada) e **gramatica** (objeto - sub-gramática).
     - **gramática.formato** (texto) - Formato esperado do valor:
       - Se "texto": o valor deve ser um texto que pode ser analisado sequencialmente pelas partes.
       - Se "lista": o valor deve ser uma lista onde cada elemento corresponde a uma parte.
+      - Se "objeto": o valor deve ser um objeto onde cada chave corresponde ao **nome** de uma parte e o valor correspondente é gerado pela sub-gramática.
 
   - Se **gramática.tipo** == "alternativa":
     - **gramática.opções** (lista) - Lista de objetos de gramática. O valor deve corresponder a pelo menos uma das opções.
