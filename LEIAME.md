@@ -29,6 +29,12 @@ Esta função analisa a entrada fornecida de acordo com a gramática especificad
   - Se **gramática.tipo** == "opcional":
     - **gramática.gramática** (objeto) - Objeto de gramática. A análise terá sucesso se a gramática corresponder à entrada ou se a entrada for vazia, retornando uma string vazia neste caso.
 
+  - Se **gramática.tipo** == "repetição":
+    - **gramática.gramática** (objeto) - A sub-gramática que será repetida (obrigatório).
+    - **gramática.formato** (texto) - Formato de retorno, pode ser "texto" ou "lista".
+    - **gramática.minimo** (número, opcional) - Mínimo de ocorrências exigidas. Padrão: 1.
+    - **gramática.maximo** (número, opcional) - Máximo de ocorrências permitidas. Omitir para ilimitado.
+
 ### Retorno
 
 - **retorno** (objeto) - Um objeto contendo o resultado da análise.
