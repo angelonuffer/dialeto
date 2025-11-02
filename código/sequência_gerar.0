@@ -53,6 +53,30 @@
       sucesso: 0
     }
 
+  gerar_com_resultado_objeto: { valor índice gramática saídas resultado gerar_de } =>
+    | (resultado.sucesso == 0) = resultado
+    | sequência_gerar.0.gerar_partes_objeto({
+      valor: valor
+      índice: índice + 1
+      gramática: gramática
+      saídas: [...saídas resultado.saída]
+      gerar_de: gerar_de
+    })
+
+  gerar_partes_objeto: { valor índice gramática saídas gerar_de } =>
+    | (índice >= gramática.partes[.]) = {
+      sucesso: 1
+      saída: {...saídas} * ""
+    }
+    | sequência_gerar.0.gerar_com_resultado_objeto({
+      valor: valor
+      índice: índice
+      gramática: gramática
+      saídas: saídas
+      resultado: gerar_de({ valor: valor[gramática.partes[índice].nome] gramática: gramática.partes[índice].gramatica })
+      gerar_de: gerar_de
+    })
+
   validar_resultado_texto: { resultado valor } =>
     | (resultado.sucesso == 1 & resultado.pos == valor[.]) = {
       sucesso: 1
@@ -77,6 +101,13 @@
         valor: valor
       })
     )
+    | (gramática.formato == "objeto") = sequência_gerar.0.gerar_partes_objeto({
+      valor: valor
+      índice: 0
+      gramática: gramática
+      saídas: []
+      gerar_de: gerar_de
+    })
     | sequência_gerar.0.gerar_partes_lista({
       valor: valor
       índice: 0
