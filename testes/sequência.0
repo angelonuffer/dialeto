@@ -434,5 +434,107 @@ uniteste.descrever({
         ])
       ]
     )
+    ...(
+      resultado = dialeto.analisar({
+        entrada: "ab"
+        gramática: {
+          tipo: "sequência"
+          partes: [
+            { nome: "primeiro" gramatica: { tipo: "símbolo" texto: "a" } }
+            { nome: "segundo" gramatica: { tipo: "símbolo" texto: "b" } }
+          ]
+          formato: "objeto"
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          1
+        ])
+        uniteste.iguais([
+          resultado.valor.primeiro
+          "a"
+        ])
+        uniteste.iguais([
+          resultado.valor.segundo
+          "b"
+        ])
+      ]
+    )
+    ...(
+      resultado = dialeto.analisar({
+        entrada: "xyz"
+        gramática: {
+          tipo: "sequência"
+          partes: [
+            { nome: "letra1" gramatica: { tipo: "faixa" de: "a" até: "z" } }
+            { nome: "letra2" gramatica: { tipo: "faixa" de: "a" até: "z" } }
+            { nome: "letra3" gramatica: { tipo: "faixa" de: "a" até: "z" } }
+          ]
+          formato: "objeto"
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          1
+        ])
+        uniteste.iguais([
+          resultado.valor.letra1
+          "x"
+        ])
+        uniteste.iguais([
+          resultado.valor.letra2
+          "y"
+        ])
+        uniteste.iguais([
+          resultado.valor.letra3
+          "z"
+        ])
+      ]
+    )
+    ...(
+      resultado = dialeto.analisar({
+        entrada: ""
+        gramática: {
+          tipo: "sequência"
+          partes: []
+          formato: "objeto"
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          1
+        ])
+      ]
+    )
+    ...(
+      resultado = dialeto.analisar({
+        entrada: "hello"
+        gramática: {
+          tipo: "sequência"
+          partes: [
+            { nome: "saudação" gramatica: { tipo: "símbolo" texto: "hel" } }
+            { nome: "final" gramatica: { tipo: "símbolo" texto: "lo" } }
+          ]
+          formato: "objeto"
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          1
+        ])
+        uniteste.iguais([
+          resultado.valor.saudação
+          "hel"
+        ])
+        uniteste.iguais([
+          resultado.valor.final
+          "lo"
+        ])
+      ]
+    )
   ]
 })

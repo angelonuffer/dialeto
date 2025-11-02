@@ -191,5 +191,75 @@ uniteste.descrever({
         ])
       ]
     )
+    ...(
+      resultado = dialeto.gerar({
+        valor: { primeiro: "a" segundo: "b" }
+        gramática: {
+          tipo: "sequência"
+          partes: [
+            { nome: "primeiro" gramatica: { tipo: "símbolo" texto: "a" } }
+            { nome: "segundo" gramatica: { tipo: "símbolo" texto: "b" } }
+          ]
+          formato: "objeto"
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          1
+        ])
+        uniteste.iguais([
+          resultado.saída
+          "ab"
+        ])
+      ]
+    )
+    ...(
+      resultado = dialeto.gerar({
+        valor: { letra1: "x" letra2: "y" letra3: "z" }
+        gramática: {
+          tipo: "sequência"
+          partes: [
+            { nome: "letra1" gramatica: { tipo: "faixa" de: "a" até: "z" } }
+            { nome: "letra2" gramatica: { tipo: "faixa" de: "a" até: "z" } }
+            { nome: "letra3" gramatica: { tipo: "faixa" de: "a" até: "z" } }
+          ]
+          formato: "objeto"
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          1
+        ])
+        uniteste.iguais([
+          resultado.saída
+          "xyz"
+        ])
+      ]
+    )
+    ...(
+      resultado = dialeto.gerar({
+        valor: { saudação: "hel" final: "lo" }
+        gramática: {
+          tipo: "sequência"
+          partes: [
+            { nome: "saudação" gramatica: { tipo: "símbolo" texto: "hel" } }
+            { nome: "final" gramatica: { tipo: "símbolo" texto: "lo" } }
+          ]
+          formato: "objeto"
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          1
+        ])
+        uniteste.iguais([
+          resultado.saída
+          "hello"
+        ])
+      ]
+    )
   ]
 })
