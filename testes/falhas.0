@@ -1,0 +1,163 @@
+uniteste = uniteste.0
+dialeto = ../código/0
+
+uniteste.descrever({
+  nome: "falhas"
+  testes: [
+    ...(
+      resultado = dialeto.analisar({
+        entrada: "d"
+        gramática: {
+          tipo: "faixa"
+          de: "a"
+          até: "c"
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          0
+        ])
+        uniteste.iguais([
+          resultado.pos
+          0
+        ])
+        uniteste.iguais([
+          resultado.esperado
+          "faixa de 'a' até 'c'"
+        ])
+        uniteste.iguais([
+          resultado.encontrado
+          "d"
+        ])
+      ]
+    )
+    ...(
+      resultado = dialeto.analisar({
+        entrada: "hello"
+        gramática: {
+          tipo: "símbolo"
+          texto: "world"
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          0
+        ])
+        uniteste.iguais([
+          resultado.pos
+          0
+        ])
+        uniteste.iguais([
+          resultado.esperado
+          "símbolo 'world'"
+        ])
+        uniteste.iguais([
+          resultado.encontrado
+          "hello"
+        ])
+      ]
+    )
+    ...(
+      resultado = dialeto.analisar({
+        entrada: "ab"
+        gramática: {
+          tipo: "sequência"
+          partes: [
+            { tipo: "símbolo" texto: "a" }
+            { tipo: "símbolo" texto: "c" }
+          ]
+          formato: "texto"
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          0
+        ])
+        uniteste.iguais([
+          resultado.pos
+          1
+        ])
+        uniteste.iguais([
+          resultado.esperado
+          "símbolo 'c'"
+        ])
+        uniteste.iguais([
+          resultado.encontrado
+          "b"
+        ])
+      ]
+    )
+    ...(
+      resultado = dialeto.analisar({
+        entrada: "c"
+        gramática: {
+          tipo: "alternativa"
+          opções: [
+            { tipo: "símbolo" texto: "a" }
+            { tipo: "símbolo" texto: "b" }
+          ]
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          0
+        ])
+        uniteste.iguais([
+          resultado.pos
+          0
+        ])
+      ]
+    )
+    ...(
+      resultado = dialeto.analisar({
+        entrada: "b"
+        gramática: {
+          tipo: "opcional"
+          gramática: { tipo: "símbolo" texto: "a" }
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          0
+        ])
+        uniteste.iguais([
+          resultado.pos
+          0
+        ])
+      ]
+    )
+    ...(
+      resultado = dialeto.analisar({
+        entrada: ""
+        gramática: {
+          tipo: "faixa"
+          de: "a"
+          até: "c"
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          0
+        ])
+        uniteste.iguais([
+          resultado.pos
+          0
+        ])
+        uniteste.iguais([
+          resultado.esperado
+          "faixa de 'a' até 'c'"
+        ])
+        uniteste.iguais([
+          resultado.encontrado
+          "fim da entrada"
+        ])
+      ]
+    )
+  ]
+})
