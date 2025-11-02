@@ -3,6 +3,7 @@ símbolo = símbolo.0
 sequência = sequência.0
 alternativa = alternativa.0
 opcional = opcional.0
+repetição = repetição.0
 
 dialeto = {
   analisar_de: { entrada pos gramática } =>
@@ -11,6 +12,7 @@ dialeto = {
     | (gramática.tipo == "sequência") = sequência.analisar({ entrada: entrada pos: pos gramática: gramática índice: 0 valores: [] analisar_de: dialeto.analisar_de })
     | (gramática.tipo == "alternativa") = alternativa.analisar({ entrada: entrada pos: pos gramática: gramática índice: 0 analisar_de: dialeto.analisar_de })
     | (gramática.tipo == "opcional") = opcional.analisar({ entrada: entrada pos: pos gramática: gramática analisar_de: dialeto.analisar_de })
+    | (gramática.tipo == "repetição") = repetição.analisar({ entrada: entrada pos: pos gramática: gramática analisar_de: dialeto.analisar_de })
     | {
       sucesso: 0
       pos: pos
@@ -45,6 +47,11 @@ dialeto = {
       sucesso: 0
       pos: 0
     }
+    | (gramática.tipo == "repetição" & dialeto.analisar_de({ entrada: entrada pos: 0 gramática: gramática }).sucesso == 1 & dialeto.analisar_de({ entrada: entrada pos: 0 gramática: gramática }).pos == entrada[.]) = {
+      sucesso: 1
+      valor: dialeto.analisar_de({ entrada: entrada pos: 0 gramática: gramática }).valor
+    }
+    | (gramática.tipo == "repetição") = dialeto.analisar_de({ entrada: entrada pos: 0 gramática: gramática })
     | {
       sucesso: 0
     }

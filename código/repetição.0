@@ -1,0 +1,62 @@
+{
+  analisar_com_resultado: { entrada pos gramática valores resultado analisar_de } =>
+    | (resultado.sucesso == 0 & valores[.] < gramática.minimo) = resultado
+    | (resultado.sucesso == 0 & gramática.formato == "texto") = {
+      sucesso: 1
+      valor: {...valores} * ""
+      pos: pos
+    }
+    | (resultado.sucesso == 0 & gramática.formato == "lista") = {
+      sucesso: 1
+      valor: valores
+      pos: pos
+    }
+    | (resultado.sucesso == 1 & gramática.maximo != 0 & valores[.] >= gramática.maximo) = {
+      sucesso: 0
+      pos: pos
+    }
+    | (resultado.sucesso == 1 & gramática.formato == "texto" & resultado.valor.tipo == "sequência" & resultado.valor.formato == "lista") = {
+      sucesso: 0
+      pos: pos
+    }
+    | (resultado.sucesso == 1) = repetição.0.analisar_com_resultado({
+      entrada: entrada
+      pos: resultado.pos
+      gramática: gramática
+      valores: [...valores resultado.valor]
+      resultado: analisar_de({ entrada: entrada pos: resultado.pos gramática: gramática.gramática })
+      analisar_de: analisar_de
+    })
+    | {
+      sucesso: 0
+      pos: pos
+    }
+
+  analisar: { entrada pos gramática analisar_de } =>
+    | (gramática.minimo == 0) = repetição.0.analisar_com_resultado({
+      entrada: entrada
+      pos: pos
+      gramática: { 
+        gramática: gramática.gramática
+        formato: gramática.formato
+        minimo: 1
+        maximo: gramática.maximo
+      }
+      valores: []
+      resultado: analisar_de({ entrada: entrada pos: pos gramática: gramática.gramática })
+      analisar_de: analisar_de
+    })
+    | repetição.0.analisar_com_resultado({
+      entrada: entrada
+      pos: pos
+      gramática: { 
+        gramática: gramática.gramática
+        formato: gramática.formato
+        minimo: gramática.minimo
+        maximo: gramática.maximo
+      }
+      valores: []
+      resultado: analisar_de({ entrada: entrada pos: pos gramática: gramática.gramática })
+      analisar_de: analisar_de
+    })
+}
