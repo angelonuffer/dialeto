@@ -1,17 +1,27 @@
 {
-  analisar_com_resultado: { entrada pos gramática valores resultado analisar_de } =>
-    | (resultado.sucesso == 0 & valores[.] < gramática.minimo) = resultado
-    | (resultado.sucesso == 0 & gramática.formato == "texto") = {
+  tratar_falha: { pos valores minimo formato resultado } =>
+    | (minimo == 0 & 1 > valores[.]) = resultado
+    | (minimo != 0 & minimo > valores[.]) = resultado
+    | (formato == "texto") = {
       sucesso: 1
       valor: {...valores} * ""
       pos: pos
     }
-    | (resultado.sucesso == 0 & gramática.formato == "lista") = {
+    | {
       sucesso: 1
       valor: valores
       pos: pos
     }
-    | (resultado.sucesso == 1 & gramática.maximo != 0 & valores[.] >= gramática.maximo) = {
+
+  analisar_com_resultado: { entrada pos gramática minimo maximo valores resultado analisar_de } =>
+    | (resultado.sucesso == 0) = repetição.0.tratar_falha({
+      pos: pos
+      valores: valores
+      minimo: minimo
+      formato: gramática.formato
+      resultado: resultado
+    })
+    | (resultado.sucesso == 1 & maximo != 0 & valores[.] >= maximo) = {
       sucesso: 0
       pos: pos
     }
@@ -23,8 +33,10 @@
       entrada: entrada
       pos: resultado.pos
       gramática: gramática
+      minimo: minimo
+      maximo: maximo
       valores: [...valores resultado.valor]
-      resultado: analisar_de({ entrada: entrada pos: resultado.pos gramática: gramática.gramática })
+      resultado: analisar_de({ entrada: entrada pos: resultado.pos gramática: gramática.subgramática })
       analisar_de: analisar_de
     })
     | {
@@ -33,30 +45,41 @@
     }
 
   analisar: { entrada pos gramática analisar_de } =>
-    | (gramática.minimo == 0) = repetição.0.analisar_com_resultado({
-      entrada: entrada
-      pos: pos
-      gramática: { 
-        gramática: gramática.gramática
-        formato: gramática.formato
+    | (gramática.minimo == 0) = (
+      sub = gramática.gramática
+      fmt = gramática.formato
+      max = gramática.maximo
+      repetição.0.analisar_com_resultado({
+        entrada: entrada
+        pos: pos
+        gramática: { 
+          subgramática: sub
+          formato: fmt
+        }
         minimo: 1
-        maximo: gramática.maximo
-      }
-      valores: []
-      resultado: analisar_de({ entrada: entrada pos: pos gramática: gramática.gramática })
-      analisar_de: analisar_de
-    })
-    | repetição.0.analisar_com_resultado({
-      entrada: entrada
-      pos: pos
-      gramática: { 
-        gramática: gramática.gramática
-        formato: gramática.formato
-        minimo: gramática.minimo
-        maximo: gramática.maximo
-      }
-      valores: []
-      resultado: analisar_de({ entrada: entrada pos: pos gramática: gramática.gramática })
-      analisar_de: analisar_de
-    })
+        maximo: max
+        valores: []
+        resultado: analisar_de({ entrada: entrada pos: pos gramática: sub })
+        analisar_de: analisar_de
+      })
+    )
+    | (
+      sub = gramática.gramática
+      fmt = gramática.formato
+      min = gramática.minimo
+      max = gramática.maximo
+      repetição.0.analisar_com_resultado({
+        entrada: entrada
+        pos: pos
+        gramática: { 
+          subgramática: sub
+          formato: fmt
+        }
+        minimo: min
+        maximo: max
+        valores: []
+        resultado: analisar_de({ entrada: entrada pos: pos gramática: sub })
+        analisar_de: analisar_de
+      })
+    )
 }
