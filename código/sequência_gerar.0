@@ -1,0 +1,87 @@
+{
+  gerar_com_resultado_de: { valor pos índice gramática saídas resultado gerar_de_de } =>
+    | (resultado.sucesso == 0) = resultado
+    | sequência_gerar.0.gerar_de({
+      valor: valor
+      pos: resultado.pos
+      índice: índice + 1
+      gramática: gramática
+      saídas: [...saídas resultado.saída]
+      gerar_de_de: gerar_de_de
+    })
+
+  gerar_de: { valor pos índice gramática saídas gerar_de_de } =>
+    | (índice >= gramática.partes[.]) = {
+      sucesso: 1
+      saída: {...saídas} * ""
+      pos: pos
+    }
+    | sequência_gerar.0.gerar_com_resultado_de({
+      valor: valor
+      pos: pos
+      índice: índice
+      gramática: gramática
+      saídas: saídas
+      resultado: gerar_de_de({ valor: valor pos: pos gramática: gramática.partes[índice] })
+      gerar_de_de: gerar_de_de
+    })
+
+  gerar_com_resultado_lista: { valor índice gramática saídas resultado gerar_de } =>
+    | (resultado.sucesso == 0) = resultado
+    | sequência_gerar.0.gerar_partes_lista({
+      valor: valor
+      índice: índice + 1
+      gramática: gramática
+      saídas: [...saídas resultado.saída]
+      gerar_de: gerar_de
+    })
+
+  gerar_partes_lista: { valor índice gramática saídas gerar_de } =>
+    | (índice >= gramática.partes[.]) = {
+      sucesso: 1
+      saída: {...saídas} * ""
+    }
+    | (índice < valor[.]) = sequência_gerar.0.gerar_com_resultado_lista({
+      valor: valor
+      índice: índice
+      gramática: gramática
+      saídas: saídas
+      resultado: gerar_de({ valor: valor[índice] gramática: gramática.partes[índice] })
+      gerar_de: gerar_de
+    })
+    | {
+      sucesso: 0
+    }
+
+  validar_resultado_texto: { resultado valor } =>
+    | (resultado.sucesso == 1 & resultado.pos == valor[.]) = {
+      sucesso: 1
+      saída: resultado.saída
+    }
+    | {
+      sucesso: 0
+    }
+
+  gerar: { valor gramática gerar_de gerar_de_de } =>
+    | (gramática.formato == "texto") = (
+      resultado = sequência_gerar.0.gerar_de({
+        valor: valor
+        pos: 0
+        índice: 0
+        gramática: gramática
+        saídas: []
+        gerar_de_de: gerar_de_de
+      })
+      sequência_gerar.0.validar_resultado_texto({
+        resultado: resultado
+        valor: valor
+      })
+    )
+    | sequência_gerar.0.gerar_partes_lista({
+      valor: valor
+      índice: 0
+      gramática: gramática
+      saídas: []
+      gerar_de: gerar_de
+    })
+}

@@ -1,0 +1,36 @@
+{
+  gerar_com_resultado_de: { valor pos índice gramática resultado gerar_de_de } =>
+    | (resultado.sucesso == 1) = resultado
+    | alternativa_gerar.0.gerar_de({ valor: valor pos: pos índice: índice + 1 gramática: gramática gerar_de_de: gerar_de_de })
+
+  gerar_de: { valor pos índice gramática gerar_de_de } =>
+    | (índice >= gramática.opções[.]) = {
+      sucesso: 0
+      pos: pos
+    }
+    | alternativa_gerar.0.gerar_com_resultado_de({
+      valor: valor
+      pos: pos
+      índice: índice
+      gramática: gramática
+      resultado: gerar_de_de({ valor: valor pos: pos gramática: gramática.opções[índice] })
+      gerar_de_de: gerar_de_de
+    })
+
+  gerar_com_resultado: { valor índice gramática resultado gerar_de gerar_de_de } =>
+    | (resultado.sucesso == 1) = resultado
+    | alternativa_gerar.0.gerar({ valor: valor índice: índice + 1 gramática: gramática gerar_de: gerar_de gerar_de_de: gerar_de_de })
+
+  gerar: { valor índice gramática gerar_de gerar_de_de } =>
+    | (índice >= gramática.opções[.]) = {
+      sucesso: 0
+    }
+    | alternativa_gerar.0.gerar_com_resultado({
+      valor: valor
+      índice: índice
+      gramática: gramática
+      resultado: gerar_de({ valor: valor gramática: gramática.opções[índice] })
+      gerar_de: gerar_de
+      gerar_de_de: gerar_de_de
+    })
+}

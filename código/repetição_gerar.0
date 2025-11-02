@@ -1,0 +1,233 @@
+{
+  tratar_falha_de: { pos saídas minimo resultado } =>
+    | (minimo == 0 & 1 > saídas[.]) = resultado
+    | (minimo != 0 & minimo > saídas[.]) = resultado
+    | {
+      sucesso: 1
+      saída: {...saídas} * ""
+      pos: pos
+    }
+
+  gerar_com_resultado_de: { valor pos índice gramática minimo maximo saídas resultado gerar_de_de } =>
+    | (resultado.sucesso == 0) = repetição_gerar.0.tratar_falha_de({
+      pos: pos
+      saídas: saídas
+      minimo: minimo
+      resultado: resultado
+    })
+    | (resultado.sucesso == 1 & maximo != 0 & saídas[.] >= maximo) = {
+      sucesso: 0
+      pos: pos
+    }
+    | (resultado.sucesso == 1) = repetição_gerar.0.gerar_de_valores({
+      valor: valor
+      pos: resultado.pos
+      índice: índice + 1
+      gramática: gramática
+      minimo: minimo
+      maximo: maximo
+      saídas: [...saídas resultado.saída]
+      gerar_de_de: gerar_de_de
+    })
+    | {
+      sucesso: 0
+      pos: pos
+    }
+
+  gerar_de_valores: { valor pos índice gramática minimo maximo saídas gerar_de_de } =>
+    repetição_gerar.0.gerar_com_resultado_de({
+      valor: valor
+      pos: pos
+      índice: índice
+      gramática: gramática
+      minimo: minimo
+      maximo: maximo
+      saídas: saídas
+      resultado: gerar_de_de({ valor: valor pos: pos gramática: gramática.gramática })
+      gerar_de_de: gerar_de_de
+    })
+
+  gerar_de: { valor pos gramática gerar_de_de } =>
+    | (gramática.minimo == 0) = (
+      min = 1
+      max = gramática.maximo
+      repetição_gerar.0.gerar_de_valores({
+        valor: valor
+        pos: pos
+        índice: 0
+        gramática: gramática
+        minimo: min
+        maximo: max
+        saídas: []
+        gerar_de_de: gerar_de_de
+      })
+    )
+    | (
+      min = gramática.minimo
+      max = gramática.maximo
+      repetição_gerar.0.gerar_de_valores({
+        valor: valor
+        pos: pos
+        índice: 0
+        gramática: gramática
+        minimo: min
+        maximo: max
+        saídas: []
+        gerar_de_de: gerar_de_de
+      })
+    )
+
+  gerar_com_resultado_texto: { valor índice gramática saídas resultado gerar_de } =>
+    | (resultado.sucesso == 0) = resultado
+    | (resultado.saída[.] == 0 & valor[.] == 0) = {
+      sucesso: 1
+      saída: {...saídas} * ""
+    }
+    | (resultado.saída[.] == 0) = resultado
+    | repetição_gerar.0.gerar_valores({
+      valor: valor[resultado.saída[.]:]
+      índice: índice + 1
+      gramática: gramática
+      saídas: [...saídas resultado.saída]
+      gerar_de: gerar_de
+    })
+
+  gerar_com_resultado_lista: { valor índice gramática saídas resultado gerar_de } =>
+    | (resultado.sucesso == 0) = resultado
+    | repetição_gerar.0.gerar_valores({
+      valor: valor
+      índice: índice + 1
+      gramática: gramática
+      saídas: [...saídas resultado.saída]
+      gerar_de: gerar_de
+    })
+
+  gerar_valores: { valor índice gramática saídas gerar_de } =>
+    | (gramática.formato == "texto" & valor[.] == 0) = {
+      sucesso: 1
+      saída: {...saídas} * ""
+    }
+    | (gramática.formato == "lista" & índice >= valor[.]) = {
+      sucesso: 1
+      saída: {...saídas} * ""
+    }
+    | (gramática.formato == "texto") = repetição_gerar.0.gerar_com_resultado_texto({
+      valor: valor
+      índice: índice
+      gramática: gramática
+      saídas: saídas
+      resultado: gerar_de({ valor: valor gramática: gramática.gramática })
+      gerar_de: gerar_de
+    })
+    | (gramática.formato == "lista") = repetição_gerar.0.gerar_com_resultado_lista({
+      valor: valor
+      índice: índice
+      gramática: gramática
+      saídas: saídas
+      resultado: gerar_de({ valor: valor[índice] gramática: gramática.gramática })
+      gerar_de: gerar_de
+    })
+    | {
+      sucesso: 0
+    }
+
+  validar_quantidade: { quantidade minimo maximo } =>
+    | (minimo != 0 & quantidade < minimo) = 0
+    | (maximo != 0 & quantidade > maximo) = 0
+    | 1
+
+  validar_resultado_texto: { resultado minimo maximo } =>
+    | (resultado.sucesso == 0) = resultado
+    | (repetição_gerar.0.validar_quantidade({ quantidade: resultado.saída[.] minimo: minimo maximo: maximo }) == 1) = resultado
+    | {
+      sucesso: 0
+    }
+
+  validar_resultado_lista: { resultado valor minimo maximo } =>
+    | (resultado.sucesso == 0) = resultado
+    | (repetição_gerar.0.validar_quantidade({ quantidade: valor[.] minimo: minimo maximo: maximo }) == 1) = resultado
+    | {
+      sucesso: 0
+    }
+
+  validar_resultado_de_texto: { resultado valor } =>
+    | (resultado.sucesso == 1 & resultado.pos == valor[.]) = {
+      sucesso: 1
+      saída: resultado.saída
+    }
+    | {
+      sucesso: 0
+    }
+
+  gerar: { valor gramática gerar_de gerar_de_de } =>
+    | (gramática.minimo == 0 & gramática.formato == "texto") = (
+      min = 1
+      max = gramática.maximo
+      resultado = repetição_gerar.0.gerar_de_valores({
+        valor: valor
+        pos: 0
+        índice: 0
+        gramática: gramática
+        minimo: min
+        maximo: max
+        saídas: []
+        gerar_de_de: gerar_de_de
+      })
+      repetição_gerar.0.validar_resultado_de_texto({
+        resultado: resultado
+        valor: valor
+      })
+    )
+    | (gramática.minimo == 0 & gramática.formato == "lista") = (
+      min = 1
+      max = gramática.maximo
+      resultado = repetição_gerar.0.gerar_valores({
+        valor: valor
+        índice: 0
+        gramática: gramática
+        saídas: []
+        gerar_de: gerar_de
+      })
+      repetição_gerar.0.validar_resultado_lista({
+        resultado: resultado
+        valor: valor
+        minimo: min
+        maximo: max
+      })
+    )
+    | (gramática.formato == "texto") = (
+      min = gramática.minimo
+      max = gramática.maximo
+      resultado = repetição_gerar.0.gerar_de_valores({
+        valor: valor
+        pos: 0
+        índice: 0
+        gramática: gramática
+        minimo: min
+        maximo: max
+        saídas: []
+        gerar_de_de: gerar_de_de
+      })
+      repetição_gerar.0.validar_resultado_de_texto({
+        resultado: resultado
+        valor: valor
+      })
+    )
+    | (
+      min = gramática.minimo
+      max = gramática.maximo
+      resultado = repetição_gerar.0.gerar_valores({
+        valor: valor
+        índice: 0
+        gramática: gramática
+        saídas: []
+        gerar_de: gerar_de
+      })
+      repetição_gerar.0.validar_resultado_lista({
+        resultado: resultado
+        valor: valor
+        minimo: min
+        maximo: max
+      })
+    )
+}
