@@ -1,4 +1,57 @@
-{
+dialeto = {
+  analisar_de: { entrada pos gramática } =>
+    | (gramática.tipo == "faixa" & pos < entrada[.]) = (
+      caractere = entrada[pos:pos+1]
+      gramática.de <= caractere & caractere <= gramática.até ? {
+        sucesso: 1
+        valor: caractere
+        pos: pos + 1
+      } : {
+        sucesso: 0
+      }
+    )
+    | (gramática.tipo == "símbolo" & pos + gramática.texto[.] <= entrada[.] & entrada[pos:pos + gramática.texto[.]] == gramática.texto) = {
+      sucesso: 1
+      valor: gramática.texto
+      pos: pos + gramática.texto[.]
+    }
+    | (gramática.tipo == "sequência") = dialeto.analisar_sequência({ entrada: entrada pos: pos gramática: gramática índice: 0 valores: [] })
+    | {
+      sucesso: 0
+    }
+
+  analisar_sequência_com_resultado: { entrada pos gramática índice valores resultado } =>
+    | (resultado.sucesso == 0) = {
+      sucesso: 0
+    }
+    | (gramática.formato == "texto" & gramática.partes[índice].tipo == "sequência" & gramática.partes[índice].formato == "lista") = {
+      sucesso: 0
+    }
+    | dialeto.analisar_sequência({ entrada: entrada pos: resultado.pos gramática: gramática índice: índice + 1 valores: [...valores resultado.valor] })
+
+  analisar_sequência: { entrada pos gramática índice valores } =>
+    | (índice >= gramática.partes[.] & gramática.formato == "texto") = {
+      sucesso: 1
+      valor: {...valores} * ""
+      pos: pos
+    }
+    | (índice >= gramática.partes[.] & gramática.formato == "lista") = {
+      sucesso: 1
+      valor: valores
+      pos: pos
+    }
+    | (índice < gramática.partes[.]) = dialeto.analisar_sequência_com_resultado({
+      entrada: entrada
+      pos: pos
+      gramática: gramática
+      índice: índice
+      valores: valores
+      resultado: dialeto.analisar_de({ entrada: entrada pos: pos gramática: gramática.partes[índice] })
+    })
+    | {
+      sucesso: 0
+    }
+
   analisar: { entrada gramática } =>
     | (gramática.tipo == "faixa" & gramática.de <= entrada & gramática.até >= entrada) = {
       sucesso: 1
@@ -8,7 +61,18 @@
       sucesso: 1
       valor: entrada
     }
+    | (gramática.tipo == "sequência" & dialeto.analisar_de({ entrada: entrada pos: 0 gramática: gramática }).sucesso == 1 & dialeto.analisar_de({ entrada: entrada pos: 0 gramática: gramática }).pos == entrada[.]) = {
+      sucesso: 1
+      valor: dialeto.analisar_de({ entrada: entrada pos: 0 gramática: gramática }).valor
+    }
+    | (gramática.tipo == "sequência") = {
+      sucesso: 0
+    }
     | {
       sucesso: 0
     }
+}
+
+{
+  analisar: dialeto.analisar
 }

@@ -19,6 +19,10 @@ Esta função analisa a entrada fornecida de acordo com a gramática especificad
     - **gramática.de** (texto) - O limite inferior da faixa.
     - **gramática.até** (texto) - O limite superior da faixa.
 
+  - Se **gramática.tipo** == "sequência":
+    - **gramática.partes** (lista) - Lista de objetos de gramática. Cada item é outra gramática válida.
+    - **gramática.formato** (texto) - Formato de retorno, pode ser "texto" ou "lista".
+
 ### Retorno
 
 - **retorno** (objeto) - Um objeto contendo o resultado da análise.
