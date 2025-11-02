@@ -1,0 +1,26 @@
+{
+  analisar: { entrada pos gramática } =>
+    | (pos + gramática.texto[.] <= entrada[.] & entrada[pos:pos + gramática.texto[.]] == gramática.texto) = {
+      sucesso: 1
+      valor: gramática.texto
+      pos: pos + gramática.texto[.]
+    }
+    | (pos < entrada[.]) = (
+      mensagem_esperado = ["símbolo '" gramática.texto "'"]
+      {
+        sucesso: 0
+        pos: pos
+        esperado: {...mensagem_esperado} * ""
+        encontrado: entrada[pos:pos + gramática.texto[.]]
+      }
+    )
+    | (
+      mensagem_esperado = ["símbolo '" gramática.texto "'"]
+      {
+        sucesso: 0
+        pos: pos
+        esperado: {...mensagem_esperado} * ""
+        encontrado: "fim da entrada"
+      }
+    )
+}

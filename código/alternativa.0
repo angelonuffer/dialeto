@@ -1,0 +1,19 @@
+{
+  analisar: { entrada pos gramática índice analisar_de } =>
+    | (índice >= gramática.opções[.]) = {
+      sucesso: 0
+      pos: pos
+    }
+    | alternativa.0.analisar_com_resultado({
+      entrada: entrada
+      pos: pos
+      gramática: gramática
+      índice: índice
+      resultado: analisar_de({ entrada: entrada pos: pos gramática: gramática.opções[índice] })
+      analisar_de: analisar_de
+    })
+
+  analisar_com_resultado: { entrada pos gramática índice resultado analisar_de } =>
+    | (resultado.sucesso == 1) = resultado
+    | alternativa.0.analisar({ entrada: entrada pos: pos gramática: gramática índice: índice + 1 analisar_de: analisar_de })
+}

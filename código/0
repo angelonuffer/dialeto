@@ -1,121 +1,18 @@
+faixa = faixa.0
+símbolo = símbolo.0
+sequência = sequência.0
+alternativa = alternativa.0
+opcional = opcional.0
+
 dialeto = {
   analisar_de: { entrada pos gramática } =>
-    | (gramática.tipo == "faixa" & pos < entrada[.] & gramática.de <= entrada[pos:pos+1] & entrada[pos:pos+1] <= gramática.até) = {
-      sucesso: 1
-      valor: entrada[pos:pos+1]
-      pos: pos + 1
-    }
-    | (gramática.tipo == "faixa" & pos < entrada[.]) = (
-      mensagem_esperado = ["faixa de '" gramática.de "' até '" gramática.até "'"]
-      {
-        sucesso: 0
-        pos: pos
-        esperado: {...mensagem_esperado} * ""
-        encontrado: entrada[pos:pos+1]
-      }
-    )
-    | (gramática.tipo == "faixa") = (
-      mensagem_esperado = ["faixa de '" gramática.de "' até '" gramática.até "'"]
-      {
-        sucesso: 0
-        pos: pos
-        esperado: {...mensagem_esperado} * ""
-        encontrado: "fim da entrada"
-      }
-    )
-    | (gramática.tipo == "símbolo" & pos + gramática.texto[.] <= entrada[.] & entrada[pos:pos + gramática.texto[.]] == gramática.texto) = {
-      sucesso: 1
-      valor: gramática.texto
-      pos: pos + gramática.texto[.]
-    }
-    | (gramática.tipo == "símbolo" & pos < entrada[.]) = (
-      mensagem_esperado = ["símbolo '" gramática.texto "'"]
-      {
-        sucesso: 0
-        pos: pos
-        esperado: {...mensagem_esperado} * ""
-        encontrado: entrada[pos:pos + gramática.texto[.]]
-      }
-    )
-    | (gramática.tipo == "símbolo") = (
-      mensagem_esperado = ["símbolo '" gramática.texto "'"]
-      {
-        sucesso: 0
-        pos: pos
-        esperado: {...mensagem_esperado} * ""
-        encontrado: "fim da entrada"
-      }
-    )
-    | (gramática.tipo == "sequência") = dialeto.analisar_sequência({ entrada: entrada pos: pos gramática: gramática índice: 0 valores: [] })
-    | (gramática.tipo == "alternativa") = dialeto.analisar_alternativa({ entrada: entrada pos: pos gramática: gramática índice: 0 })
-    | (gramática.tipo == "opcional") = dialeto.analisar_opcional({ entrada: entrada pos: pos gramática: gramática })
+    | (gramática.tipo == "faixa") = faixa.analisar({ entrada: entrada pos: pos gramática: gramática })
+    | (gramática.tipo == "símbolo") = símbolo.analisar({ entrada: entrada pos: pos gramática: gramática })
+    | (gramática.tipo == "sequência") = sequência.analisar({ entrada: entrada pos: pos gramática: gramática índice: 0 valores: [] analisar_de: dialeto.analisar_de })
+    | (gramática.tipo == "alternativa") = alternativa.analisar({ entrada: entrada pos: pos gramática: gramática índice: 0 analisar_de: dialeto.analisar_de })
+    | (gramática.tipo == "opcional") = opcional.analisar({ entrada: entrada pos: pos gramática: gramática analisar_de: dialeto.analisar_de })
     | {
       sucesso: 0
-      pos: pos
-    }
-
-  analisar_sequência_com_resultado: { entrada pos gramática índice valores resultado } =>
-    | (resultado.sucesso == 0) = resultado
-    | (gramática.formato == "texto" & gramática.partes[índice].tipo == "sequência" & gramática.partes[índice].formato == "lista") = {
-      sucesso: 0
-      pos: pos
-    }
-    | (gramática.formato == "texto" & gramática.partes[índice].tipo == "sequência" & gramática.partes[índice].formato == "texto") = dialeto.analisar_sequência({ entrada: entrada pos: resultado.pos gramática: gramática índice: índice + 1 valores: [...valores resultado.valor] })
-    | dialeto.analisar_sequência({ entrada: entrada pos: resultado.pos gramática: gramática índice: índice + 1 valores: [...valores resultado.valor] })
-
-  analisar_sequência: { entrada pos gramática índice valores } =>
-    | (índice >= gramática.partes[.] & gramática.formato == "texto") = {
-      sucesso: 1
-      valor: {...valores} * ""
-      pos: pos
-    }
-    | (índice >= gramática.partes[.] & gramática.formato == "lista") = {
-      sucesso: 1
-      valor: valores
-      pos: pos
-    }
-    | (índice < gramática.partes[.]) = dialeto.analisar_sequência_com_resultado({
-      entrada: entrada
-      pos: pos
-      gramática: gramática
-      índice: índice
-      valores: valores
-      resultado: dialeto.analisar_de({ entrada: entrada pos: pos gramática: gramática.partes[índice] })
-    })
-    | {
-      sucesso: 0
-      pos: pos
-    }
-
-  analisar_alternativa: { entrada pos gramática índice } =>
-    | (índice >= gramática.opções[.]) = {
-      sucesso: 0
-      pos: pos
-    }
-    | dialeto.analisar_alternativa_com_resultado({
-      entrada: entrada
-      pos: pos
-      gramática: gramática
-      índice: índice
-      resultado: dialeto.analisar_de({ entrada: entrada pos: pos gramática: gramática.opções[índice] })
-    })
-
-  analisar_alternativa_com_resultado: { entrada pos gramática índice resultado } =>
-    | (resultado.sucesso == 1) = resultado
-    | dialeto.analisar_alternativa({ entrada: entrada pos: pos gramática: gramática índice: índice + 1 })
-
-  analisar_opcional: { entrada pos gramática } =>
-    dialeto.analisar_opcional_com_resultado({
-      entrada: entrada
-      pos: pos
-      resultado: dialeto.analisar_de({ entrada: entrada pos: pos gramática: gramática.gramática })
-    })
-
-  analisar_opcional_com_resultado: { entrada pos resultado } =>
-    | (resultado.sucesso == 1) = resultado
-    | {
-      sucesso: 1
-      valor: ""
       pos: pos
     }
 
