@@ -1,13 +1,17 @@
-(uniteste.0).descrever({
-  nome: "dialeto"
-  testes: [
-    faixa.0
-    símbolo.0
-    sequência.0
-    alternativa.0
-    opcional.0
-    repetição.0
-    falhas.0
-    gerar.0
-  ]
-})
+uniteste = uniteste.0
+
+uniteste.exibir(
+  uniteste.descrever({
+    nome: "dialeto"
+    testes: [
+      faixa.0
+      símbolo.0
+      sequência.0
+      alternativa.0
+      opcional.0
+      repetição.0
+      falhas.0
+      gerar.0
+    ]
+  })
+)

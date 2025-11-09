@@ -16,9 +16,9 @@ jobs:
     - uses: actions/checkout@v4
       with:
         repository: angelonuffer/0
-        ref: e1df08b8e174b30e8a27d536b841aeb80c8d51da
+        ref: eb8805bb7a24318e8945581775290bba7616ce9e
         path: 0
     - uses: actions/setup-node@v4
       with:
         node-version: '22'
-    - run: node 0/código/0_node.js atual/testes/0 node | node
+    - run: node 0/código/0_node.js atual/testes/0 | node
