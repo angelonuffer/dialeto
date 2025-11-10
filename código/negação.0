@@ -1,0 +1,27 @@
+{
+  analisar: { entrada pos gramática analisar_de } =>
+    negação.0.analisar_com_resultado({
+      entrada: entrada
+      pos: pos
+      resultado: analisar_de({ entrada: entrada pos: pos gramática: gramática.gramática })
+    })
+
+  analisar_com_resultado: { entrada pos resultado } =>
+    | (resultado.sucesso == 1) = {
+      sucesso: 0
+      pos: pos
+      esperado: "negação (sub-gramática falhar)"
+      encontrado: "sub-gramática teve sucesso"
+    }
+    | (pos >= entrada[.]) = {
+      sucesso: 0
+      pos: pos
+      esperado: "negação (qualquer caractere)"
+      encontrado: "fim da entrada"
+    }
+    | {
+      sucesso: 1
+      valor: entrada[pos:pos + 1]
+      pos: pos + 1
+    }
+}
