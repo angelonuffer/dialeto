@@ -43,6 +43,9 @@ O objeto de gramática que define as regras de análise.
   - `minimo : número` (opcional) - Mínimo de ocorrências exigidas. Padrão: 1.
   - `maximo : número` (opcional) - Máximo de ocorrências permitidas. Omitir para ilimitado.
 
+- Se `tipo` == "inversão":
+  - `gramática : objeto` - Objeto de gramática. A análise inverterá o texto de entrada antes de aplicar a sub-gramática. A geração aplicará a sub-gramática e inverterá o resultado.
+
 ## análise : objeto
 
 Um objeto contendo o resultado da análise.

@@ -261,5 +261,51 @@ uniteste.descrever({
         ])
       ]
     )
+    ...(
+      resultado = dialeto.gerar({
+        valor: "hello"
+        gramática: {
+          tipo: "inversão"
+          gramática: { tipo: "símbolo" texto: "hello" }
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          1
+        ])
+        uniteste.iguais([
+          resultado.saída
+          "olleh"
+        ])
+      ]
+    )
+    ...(
+      resultado = dialeto.gerar({
+        valor: "abc"
+        gramática: {
+          tipo: "inversão"
+          gramática: {
+            tipo: "sequência"
+            partes: [
+              { tipo: "símbolo" texto: "a" }
+              { tipo: "símbolo" texto: "b" }
+              { tipo: "símbolo" texto: "c" }
+            ]
+            formato: "texto"
+          }
+        }
+      })
+      [
+        uniteste.iguais([
+          resultado.sucesso
+          1
+        ])
+        uniteste.iguais([
+          resultado.saída
+          "cba"
+        ])
+      ]
+    )
   ]
 })

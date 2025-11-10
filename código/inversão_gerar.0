@@ -1,0 +1,53 @@
+{
+  reverter_texto: { texto índice } =>
+    | (índice >= texto[.]) = ""
+    | [inversão_gerar.0.reverter_texto({ texto: texto índice: índice + 1 }) texto[índice:índice+1]] * ""
+
+  gerar_de: { valor pos gramática gerar_de_de } =>
+    | (pos >= valor[.]) = {
+      sucesso: 0
+      pos: pos
+    }
+    | inversão_gerar.0.gerar_de_com_resultado({
+      valor: valor[pos:valor[.]]
+      pos: pos
+      gramática: gramática
+      texto_restante: valor[pos:valor[.]]
+      gerar_de_de: gerar_de_de
+    })
+
+  gerar_de_com_resultado: { valor pos gramática texto_restante gerar_de_de } =>
+    inversão_gerar.0.processar_resultado({
+      pos: pos
+      texto_restante: texto_restante
+      resultado: gerar_de_de({ valor: valor pos: 0 gramática: gramática.gramática })
+    })
+
+  processar_resultado: { pos texto_restante resultado } =>
+    | (resultado.sucesso == 0) = {
+      sucesso: 0
+      pos: pos
+    }
+    | (resultado.pos != texto_restante[.]) = {
+      sucesso: 0
+      pos: pos
+    }
+    | {
+      sucesso: 1
+      saída: inversão_gerar.0.reverter_texto({ texto: resultado.saída índice: 0 })
+      pos: pos + texto_restante[.]
+    }
+
+  gerar: { valor gramática gerar_de gerar_de_de } =>
+    inversão_gerar.0.gerar_com_resultado({
+      gramática: gramática
+      resultado: gerar_de({ valor: valor gramática: gramática.gramática })
+    })
+
+  gerar_com_resultado: { gramática resultado } =>
+    | (resultado.sucesso == 0) = resultado
+    | {
+      sucesso: 1
+      saída: inversão_gerar.0.reverter_texto({ texto: resultado.saída índice: 0 })
+    }
+}

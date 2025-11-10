@@ -1,0 +1,43 @@
+{
+  reverter_texto: { texto índice } =>
+    | (índice >= texto[.]) = ""
+    | [inversão.0.reverter_texto({ texto: texto índice: índice + 1 }) texto[índice:índice+1]] * ""
+
+  analisar: { entrada pos gramática analisar_de } =>
+    | (pos >= entrada[.]) = {
+      sucesso: 0
+      pos: pos
+    }
+    | inversão.0.analisar_com_resultado({
+      entrada: entrada
+      pos: pos
+      gramática: gramática
+      texto_restante: entrada[pos:entrada[.]]
+      texto_invertido: inversão.0.reverter_texto({ texto: entrada[pos:entrada[.]] índice: 0 })
+      analisar_de: analisar_de
+    })
+
+  analisar_com_resultado: { entrada pos gramática texto_restante texto_invertido analisar_de } =>
+    inversão.0.processar_resultado({
+      entrada: entrada
+      pos: pos
+      gramática: gramática
+      texto_restante: texto_restante
+      resultado: analisar_de({ entrada: texto_invertido pos: 0 gramática: gramática.gramática })
+    })
+
+  processar_resultado: { entrada pos gramática texto_restante resultado } =>
+    | (resultado.sucesso == 0) = {
+      sucesso: 0
+      pos: pos
+    }
+    | (resultado.pos != texto_restante[.]) = {
+      sucesso: 0
+      pos: pos
+    }
+    | {
+      sucesso: 1
+      valor: resultado.valor
+      pos: entrada[.]
+    }
+}

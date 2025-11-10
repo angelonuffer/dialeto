@@ -4,12 +4,14 @@ sequência = sequência.0
 alternativa = alternativa.0
 opcional = opcional.0
 repetição = repetição.0
+inversão = inversão.0
 faixa_gerar = faixa_gerar.0
 símbolo_gerar = símbolo_gerar.0
 sequência_gerar = sequência_gerar.0
 alternativa_gerar = alternativa_gerar.0
 opcional_gerar = opcional_gerar.0
 repetição_gerar = repetição_gerar.0
+inversão_gerar = inversão_gerar.0
 
 dialeto = {
   analisar_de: { entrada pos gramática } =>
@@ -19,6 +21,7 @@ dialeto = {
     | (gramática.tipo == "alternativa") = alternativa.analisar({ entrada: entrada pos: pos gramática: gramática índice: 0 analisar_de: dialeto.analisar_de })
     | (gramática.tipo == "opcional") = opcional.analisar({ entrada: entrada pos: pos gramática: gramática analisar_de: dialeto.analisar_de })
     | (gramática.tipo == "repetição") = repetição.analisar({ entrada: entrada pos: pos gramática: gramática analisar_de: dialeto.analisar_de })
+    | (gramática.tipo == "inversão") = inversão.analisar({ entrada: entrada pos: pos gramática: gramática analisar_de: dialeto.analisar_de })
     | {
       sucesso: 0
       pos: pos
@@ -58,6 +61,11 @@ dialeto = {
       valor: dialeto.analisar_de({ entrada: entrada pos: 0 gramática: gramática }).valor
     }
     | (gramática.tipo == "repetição") = dialeto.analisar_de({ entrada: entrada pos: 0 gramática: gramática })
+    | (gramática.tipo == "inversão" & dialeto.analisar_de({ entrada: entrada pos: 0 gramática: gramática }).sucesso == 1 & dialeto.analisar_de({ entrada: entrada pos: 0 gramática: gramática }).pos == entrada[.]) = {
+      sucesso: 1
+      valor: dialeto.analisar_de({ entrada: entrada pos: 0 gramática: gramática }).valor
+    }
+    | (gramática.tipo == "inversão") = dialeto.analisar_de({ entrada: entrada pos: 0 gramática: gramática })
     | {
       sucesso: 0
     }
@@ -69,6 +77,7 @@ dialeto = {
     | (gramática.tipo == "alternativa") = alternativa_gerar.gerar_de({ valor: valor pos: pos índice: 0 gramática: gramática gerar_de_de: dialeto.gerar_de_de })
     | (gramática.tipo == "opcional") = opcional_gerar.gerar_de({ valor: valor pos: pos gramática: gramática gerar_de_de: dialeto.gerar_de_de })
     | (gramática.tipo == "repetição") = repetição_gerar.gerar_de({ valor: valor pos: pos gramática: gramática gerar_de_de: dialeto.gerar_de_de })
+    | (gramática.tipo == "inversão") = inversão_gerar.gerar_de({ valor: valor pos: pos gramática: gramática gerar_de_de: dialeto.gerar_de_de })
     | {
       sucesso: 0
       pos: pos
@@ -81,6 +90,7 @@ dialeto = {
     | (gramática.tipo == "alternativa") = alternativa_gerar.gerar({ valor: valor índice: 0 gramática: gramática gerar_de: dialeto.gerar_de gerar_de_de: dialeto.gerar_de_de })
     | (gramática.tipo == "opcional") = opcional_gerar.gerar({ valor: valor gramática: gramática gerar_de: dialeto.gerar_de gerar_de_de: dialeto.gerar_de_de })
     | (gramática.tipo == "repetição") = repetição_gerar.gerar({ valor: valor gramática: gramática gerar_de: dialeto.gerar_de gerar_de_de: dialeto.gerar_de_de })
+    | (gramática.tipo == "inversão") = inversão_gerar.gerar({ valor: valor gramática: gramática gerar_de: dialeto.gerar_de gerar_de_de: dialeto.gerar_de_de })
     | {
       sucesso: 0
     }
