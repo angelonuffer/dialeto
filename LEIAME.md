@@ -43,6 +43,9 @@ O objeto de gramática que define as regras de análise.
   - `minimo : número` (opcional) - Mínimo de ocorrências exigidas. Padrão: 1.
   - `maximo : número` (opcional) - Máximo de ocorrências permitidas. Omitir para ilimitado.
 
+- Se `tipo` == "negação":
+  - `gramática : objeto` - A sub-gramática que será negada. A análise falha se a sub-gramática tiver sucesso e tem sucesso consumindo um caractere se a sub-gramática falhar.
+
 ## análise : objeto
 
 Um objeto contendo o resultado da análise.
