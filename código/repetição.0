@@ -1,10 +1,9 @@
 {
   tratar_falha: { pos valores minimo formato resultado } =>
-    | (minimo == 0 & 1 > valores[.]) = resultado
-    | (minimo != 0 & minimo > valores[.]) = resultado
+    | (minimo > valores[.]) = resultado
     | (formato == "texto") = {
       sucesso: 1
-      valor: {...valores} * ""
+      valor: valores * ""
       pos: pos
     }
     | {
@@ -25,10 +24,6 @@
       sucesso: 0
       pos: pos
     }
-    | (resultado.sucesso == 1 & gramática.formato == "texto" & resultado.valor.tipo == "sequência" & resultado.valor.formato == "lista") = {
-      sucesso: 0
-      pos: pos
-    }
     | (resultado.sucesso == 1) = repetição.0.analisar_com_resultado({
       entrada: entrada
       pos: resultado.pos
@@ -45,41 +40,19 @@
     }
 
   analisar: { entrada pos gramática analisar_de } =>
-    | (gramática.minimo == 0) = (
-      sub = gramática.gramática
-      fmt = gramática.formato
-      max = gramática.maximo
-      min_padrao = 1
+    (
+      g = { minimo: 1 maximo: 0 ...gramática }
       repetição.0.analisar_com_resultado({
         entrada: entrada
         pos: pos
         gramática: { 
-          subgramática: sub
-          formato: fmt
+          subgramática: g.gramática
+          formato: g.formato
         }
-        minimo: min_padrao
-        maximo: max
+        minimo: g.minimo
+        maximo: g.maximo
         valores: []
-        resultado: analisar_de({ entrada: entrada pos: pos gramática: sub })
-        analisar_de: analisar_de
-      })
-    )
-    | (
-      sub = gramática.gramática
-      fmt = gramática.formato
-      min = gramática.minimo
-      max = gramática.maximo
-      repetição.0.analisar_com_resultado({
-        entrada: entrada
-        pos: pos
-        gramática: { 
-          subgramática: sub
-          formato: fmt
-        }
-        minimo: min
-        maximo: max
-        valores: []
-        resultado: analisar_de({ entrada: entrada pos: pos gramática: sub })
+        resultado: analisar_de({ entrada: entrada pos: pos gramática: g.gramática })
         analisar_de: analisar_de
       })
     )
