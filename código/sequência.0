@@ -12,7 +12,7 @@
   analisar: { entrada pos gramática índice valores analisar_de } =>
     | (índice >= gramática.partes[.] & gramática.formato == "texto") = {
       sucesso: 1
-      valor: {...valores} * ""
+      valor: valores * ""
       pos: pos
     }
     | (índice >= gramática.partes[.] & gramática.formato == "lista") = {

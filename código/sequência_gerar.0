@@ -13,7 +13,7 @@
   gerar_de: { valor pos índice gramática saídas gerar_de_de } =>
     | (índice >= gramática.partes[.]) = {
       sucesso: 1
-      saída: {...saídas} * ""
+      saída: saídas * ""
       pos: pos
     }
     | sequência_gerar.0.gerar_com_resultado_de({
@@ -39,7 +39,7 @@
   gerar_partes_lista: { valor índice gramática saídas gerar_de } =>
     | (índice >= gramática.partes[.]) = {
       sucesso: 1
-      saída: {...saídas} * ""
+      saída: saídas * ""
     }
     | (índice < valor[.]) = sequência_gerar.0.gerar_com_resultado_lista({
       valor: valor
@@ -66,7 +66,7 @@
   gerar_partes_objeto: { valor índice gramática saídas gerar_de } =>
     | (índice >= gramática.partes[.]) = {
       sucesso: 1
-      saída: {...saídas} * ""
+      saída: saídas * ""
     }
     | sequência_gerar.0.gerar_com_resultado_objeto({
       valor: valor

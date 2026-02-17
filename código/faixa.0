@@ -10,7 +10,7 @@
       {
         sucesso: 0
         pos: pos
-        esperado: {...mensagem_esperado} * ""
+        esperado: mensagem_esperado * ""
         encontrado: entrada[pos:pos+1]
       }
     )
@@ -19,7 +19,7 @@
       {
         sucesso: 0
         pos: pos
-        esperado: {...mensagem_esperado} * ""
+        esperado: mensagem_esperado * ""
         encontrado: "fim da entrada"
       }
     )

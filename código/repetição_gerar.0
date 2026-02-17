@@ -1,10 +1,9 @@
 {
   tratar_falha_de: { pos saídas minimo resultado } =>
-    | (minimo == 0 & 1 > saídas[.]) = resultado
-    | (minimo != 0 & minimo > saídas[.]) = resultado
+    | (minimo > saídas[.]) = resultado
     | {
       sucesso: 1
-      saída: {...saídas} * ""
+      saída: saídas * ""
       pos: pos
     }
 
@@ -48,30 +47,15 @@
     })
 
   gerar_de: { valor pos gramática gerar_de_de } =>
-    | (gramática.minimo == 0) = (
-      min = 1
-      max = gramática.maximo
+    (
+      g = { minimo: 1 maximo: 0 ...gramática }
       repetição_gerar.0.gerar_de_valores({
         valor: valor
         pos: pos
         índice: 0
-        gramática: gramática
-        minimo: min
-        maximo: max
-        saídas: []
-        gerar_de_de: gerar_de_de
-      })
-    )
-    | (
-      min = gramática.minimo
-      max = gramática.maximo
-      repetição_gerar.0.gerar_de_valores({
-        valor: valor
-        pos: pos
-        índice: 0
-        gramática: gramática
-        minimo: min
-        maximo: max
+        gramática: g
+        minimo: g.minimo
+        maximo: g.maximo
         saídas: []
         gerar_de_de: gerar_de_de
       })
@@ -81,7 +65,7 @@
     | (resultado.sucesso == 0) = resultado
     | (resultado.saída[.] == 0 & valor[.] == 0) = {
       sucesso: 1
-      saída: {...saídas} * ""
+      saída: saídas * ""
     }
     | (resultado.saída[.] == 0) = resultado
     | repetição_gerar.0.gerar_valores({
@@ -105,11 +89,11 @@
   gerar_valores: { valor índice gramática saídas gerar_de } =>
     | (gramática.formato == "texto" & valor[.] == 0) = {
       sucesso: 1
-      saída: {...saídas} * ""
+      saída: saídas * ""
     }
     | (gramática.formato == "lista" & índice >= valor[.]) = {
       sucesso: 1
-      saída: {...saídas} * ""
+      saída: saídas * ""
     }
     | (gramática.formato == "texto") = repetição_gerar.0.gerar_com_resultado_texto({
       valor: valor
@@ -161,15 +145,14 @@
 
   gerar: { valor gramática gerar_de gerar_de_de } =>
     | (gramática.minimo == 0 & gramática.formato == "texto") = (
-      min = 1
-      max = gramática.maximo
+      g = { minimo: 1 maximo: 0 ...gramática }
       resultado = repetição_gerar.0.gerar_de_valores({
         valor: valor
         pos: 0
         índice: 0
-        gramática: gramática
-        minimo: min
-        maximo: max
+        gramática: g
+        minimo: g.minimo
+        maximo: g.maximo
         saídas: []
         gerar_de_de: gerar_de_de
       })
@@ -179,32 +162,30 @@
       })
     )
     | (gramática.minimo == 0 & gramática.formato == "lista") = (
-      min = 1
-      max = gramática.maximo
+      g = { minimo: 1 maximo: 0 ...gramática }
       resultado = repetição_gerar.0.gerar_valores({
         valor: valor
         índice: 0
-        gramática: gramática
+        gramática: g
         saídas: []
         gerar_de: gerar_de
       })
       repetição_gerar.0.validar_resultado_lista({
         resultado: resultado
         valor: valor
-        minimo: min
-        maximo: max
+        minimo: g.minimo
+        maximo: g.maximo
       })
     )
     | (gramática.formato == "texto") = (
-      min = gramática.minimo
-      max = gramática.maximo
+      g = { minimo: 1 maximo: 0 ...gramática }
       resultado = repetição_gerar.0.gerar_de_valores({
         valor: valor
         pos: 0
         índice: 0
-        gramática: gramática
-        minimo: min
-        maximo: max
+        gramática: g
+        minimo: g.minimo
+        maximo: g.maximo
         saídas: []
         gerar_de_de: gerar_de_de
       })
@@ -214,20 +195,19 @@
       })
     )
     | (
-      min = gramática.minimo
-      max = gramática.maximo
+      g = { minimo: 1 maximo: 0 ...gramática }
       resultado = repetição_gerar.0.gerar_valores({
         valor: valor
         índice: 0
-        gramática: gramática
+        gramática: g
         saídas: []
         gerar_de: gerar_de
       })
       repetição_gerar.0.validar_resultado_lista({
         resultado: resultado
         valor: valor
-        minimo: min
-        maximo: max
+        minimo: g.minimo
+        maximo: g.maximo
       })
     )
 }
